@@ -2,6 +2,6 @@
 
 _.assign(comp, {
   cssd: () => m('.content',
-    m('p', 'fitur dalam perencanaan..')
+    m('p', 'feature is in planning phase..')
   )
 })

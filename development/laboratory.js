@@ -2,9 +2,9 @@
 
 _.assign(comp, {
   laboratory: () => state.login.bidang !== 8
-  ? m('p', 'Hanya untuk petugas labor')
+  ? m('p', 'Only for laboratorist')
   : m('.content',
-    m('h1', 'Laboratorium'),
+    m('h1', 'Laboratory'),
     m('.box', m('table.table.is-striped',
       {onupdate: () => [
         db.references.toArray(array => state.references = array),
@@ -39,7 +39,7 @@ _.assign(comp, {
         ))
       ]},
       m('thead', m('tr',
-        ['Waktu Permintaan', 'No. MR', 'Nama Pasien', 'Instalasi', 'Dokter', 'Diproses']
+        ['Request Time', 'MR Num.', 'Patient Name', 'Department', 'Doctor', 'In Process']
         .map(i => m('th', i))
       )),
       // berbeda dengan radiologi, 1 baris mewakili 1 kali rawat/observasi
@@ -61,7 +61,7 @@ _.assign(comp, {
             i.pasien.identitas.nama_lengkap,
             ors([
               _.get(i, 'rawat.klinik') && look('klinik', i.rawat.klinik),
-              i.observasi && 'Rawat Inap',
+              i.observasi && 'Inpatient',
               'Emergency'
             ]),
             lookUser(ors([
@@ -80,7 +80,7 @@ _.assign(comp, {
     ))
   ),
   responLaboratory: () => m('.content',
-    m('h2', 'Respon Laboratorium'),
+    m('h2', 'Laboratory Response'),
     m(autoForm({
       id: 'responLaboratory',
       schema: _.merge({},
@@ -99,7 +99,7 @@ _.assign(comp, {
       doc: {labor: state.responLaboratory.labor.filter(i => ors([
         !i.konfirmasi, !i.hasil
       ]))},
-      confirmMessage: 'Yakin dengan respon form laboratorium ini?',
+      confirmMessage: 'Are you sure with this laboratory response?',
       action: doc => [
         updateBoth(
           'patients', state.responLaboratory.pasien._id,

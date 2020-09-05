@@ -2,12 +2,12 @@
 
 _.assign(comp, {
   outpatient: () => !_.includes([2, 3], state.login.peranan) ?
-  m('p', 'Hanya untuk tenaga medis') : m('.content',
+  m('p', 'Only for doctors and nurses') : m('.content',
     reports.outpatient(),
-    m('h3', 'Antrian pasien poliklinik '+look('klinik', state.login.poliklinik)),
+    m('h3', 'Clinic queue list of '+look('klinik', state.login.poliklinik)),
     m('.box', m('table.table.is-striped',
       m('thead', m('tr',
-        ['Kunjungan Terakhir', 'No. MR', 'Nama lengkap', 'Tanggal lahir', 'Tempat lahir']
+        ['Last Visit', 'MR Num.', 'Patient Name', 'Date of Birth', 'Place of Birth']
         .map(i => m('th', i))
       )),
       m('tbody',
@@ -50,7 +50,7 @@ _.assign(comp, {
         _id: state.onePatient._id
       }, res => res && db.patients.put(res))},
       m('thead', m('tr',
-        ['Tanggal berobat', 'Poliklinik', 'Cara bayar', 'Perawat', 'Dokter']
+        ['Visit Date', 'Clinic', 'Payment Method', 'Nurse', 'Doctor']
         .map(i => m('th', i)),
         state.login.peranan === 4 && m('th', 'Hapus')
       )),
@@ -59,11 +59,11 @@ _.assign(comp, {
           {ondblclick: () => [
             state.modalVisit = _.includes([2, 3, 4], state.login.peranan) &&
             ors([i.cara_bayar !== 1, i.bayar_pendaftaran]) && m('.box',
-              m('h3', 'Rincian Kunjungan Rawat Jalan'),
+              m('h3', 'Outpatient Visit Details'),
               m('table.table',
-                m('tr', m('th', 'Tanggal'), m('td', day(i.tanggal, true))),
-                m('tr', m('th', 'Poliklinik'), m('td', look('klinik', i.klinik))),
-                m('tr', m('th', 'Cara bayar'), m('td', look('cara_bayar', i.cara_bayar))),
+                m('tr', m('th', 'Date'), m('td', day(i.tanggal, true))),
+                m('tr', m('th', 'Clinic'), m('td', look('klinik', i.klinik))),
+                m('tr', m('th', 'Payment Method'), m('td', look('cara_bayar', i.cara_bayar))),
                 makeRincianSoapPerawat(i.soapPerawat),
                 makeRincianSoapDokter(i.soapDokter),
               ),
@@ -81,18 +81,18 @@ _.assign(comp, {
                     makeIconLabel(
                       'user-md',
                       state.login.peranan === 3 ?
-                      'Soap Dokter' : 'Soap Perawat'
+                      'Doctor SOAP' : 'Nurse SOAP'
                     )
                   )
                 ]),
                 m('.button.is-info',
                   {onclick: () => makePdf.soap(state.onePatient.identitas, i)},
-                  makeIconLabel('print', 'Cetak SOAP')
+                  makeIconLabel('print', 'Print SOAP')
                 ),
                 _.get(i.soapDokter, 'labor') && m('.button.is-info',
                   {onclick: () => makePdf.labor(
                     state.onePatient.identitas, i.soapDokter.labor
-                  )}, makeIconLabel('print', 'Cetak Labor')
+                  )}, makeIconLabel('print', 'Print Labor')
                 )
               )
             )
@@ -108,7 +108,7 @@ _.assign(comp, {
             state.login.peranan === 4,
             !i.bayar_konsultasi
           ]) && m('td', m('.button.is-danger', {
-            'data-tooltip': 'klik ganda bila yakin hapus',
+            'data-tooltip': 'double-click if sure to delete',
             ondblclick: e => [
               e.stopPropagation(),
               updateBoth('patients', state.onePatient._id, _.assign(
@@ -119,15 +119,15 @@ _.assign(comp, {
                 }
               ))
             ]
-          }, makeIconLabel('trash-alt', 'Hapus')))
+          }, makeIconLabel('trash-alt', 'Delete')))
         ))
       )
     )),
-    m('p.help.has-text-grey-light', 'Note: Jika pasien umum belum bayar maka tidak dapat diklik'),
+    m('p.help.has-text-grey-light', 'Note: Unable to open unless the self-paying patient pay first'),
     makeModal('modalVisit'),
     state.login.bidang === 1 && m('.button.is-success',
       {onclick: () => state.route = 'poliVisit'},
-      makeIconLabel('file-invoice', 'Kunjungi Rawat Jalan')
+      makeIconLabel('file-invoice', 'Visit Clinic')
     )
   )
 })

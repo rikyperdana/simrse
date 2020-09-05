@@ -2,8 +2,8 @@
 
 var selects = name => _.reduce(
   {
-    alias: ['tn', 'ny', 'nn', 'an', 'by'],
-    kelamin: ['laki-laki', 'perempuan'],
+    alias: ['mr.', 'mrs.', 'ms.', 'child', 'baby'],
+    kelamin: ['male', 'female'],
     agama: ['islam', 'katolik', 'protestan', 'budha', 'hindu', 'konghuchu'],
     nikah: ['nikah', 'belum_nikah', 'janda', 'duda'],
     pendidikan: ['sd', 'smp', 'sma', 'diploma', 's1', 's2', 's3', 'tidak_sekolah'],

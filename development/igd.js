@@ -2,7 +2,7 @@
 
 _.assign(comp, {
   emergency: () => !_.includes([2, 3], state.login.peranan) ?
-  m('p', 'Hanya untuk tenaga medis') : m('.content',
+  m('p', 'Only for nurses and doctors') : m('.content',
     {onupdate: () =>
       db.patients.toArray(array =>
         state.emergencyList = array.filter(i =>
@@ -13,10 +13,11 @@ _.assign(comp, {
       )
     },
     reports.igd(),
-    m('h3', 'Unit Gawat Darurat'),
+    m('h3', 'Emergency Unit'),
     m('.box', m('table.table.is-striped',
       m('thead', m('tr',
         ['No. MR', 'Nama Pasien', 'Jam Masuk']
+        ['MR Num', 'Patient Name', 'Entry Time']
         .map(i => m('th', i))
       )),
       m('tbody',
@@ -42,7 +43,7 @@ _.assign(comp, {
   emergencyHistory: () => m('.content',
     m('.box', m('table.table',
       m('thead', m('tr',
-        ['Tanggal berobat', 'Cara bayar', 'Perawat', 'Dokter']
+        ['Entry Time', 'Payment Method', 'Nurse', 'Doctor']
         .map(i => m('th', i)),
         state.login.peranan === 4 && m('th', 'Hapus')
       )),
@@ -51,12 +52,12 @@ _.assign(comp, {
         .map(i => m('tr',
           {ondblclick: () =>
             state.modalVisit = m('.box',
-              m('h4', 'Rincian kunjungan IGD'),
+              m('h4', 'Emergency Visit Details'),
               m('table.table',
-                m('tr', m('th', 'Tanggal berobat'), m('td', day(i.tanggal))),
-                m('tr', m('th', 'Cara bayar'), m('td', look('cara_bayar', i.cara_bayar))),
-                m('tr', m('th', 'Perawat'), m('td', lookUser(_.get(i, 'soapPerawat.perawat')))),
-                m('tr', m('th', 'Dokter'), m('td', lookUser(_.get(i, 'soapDokter.dokter')))),
+                m('tr', m('th', 'Entry Time'), m('td', day(i.tanggal))),
+                m('tr', m('th', 'Payment Method'), m('td', look('cara_bayar', i.cara_bayar))),
+                m('tr', m('th', 'Nurse'), m('td', lookUser(_.get(i, 'soapPerawat.perawat')))),
+                m('tr', m('th', 'Doctor'), m('td', lookUser(_.get(i, 'soapDokter.dokter')))),
                 makeRincianSoapPerawat(i.soapPerawat),
                 makeRincianSoapDokter(i.soapDokter)
               ),
@@ -74,13 +75,13 @@ _.assign(comp, {
                     makeIconLabel(
                       'user-md',
                       state.login.peranan === 3 ?
-                      'Soap Dokter' : 'Soap Perawat'
+                      'Doctor SOAP' : 'Nurse SOAP'
                     )
                   )
                 ]),
                 m('.button.is-info',
                   {onclick: () => makePdf.soap(state.onePatient.identitas, i)},
-                  makeIconLabel('print', 'Cetak SOAP')
+                  makeIconLabel('print', 'Print SOAP')
                 )
               )
             )
@@ -95,7 +96,7 @@ _.assign(comp, {
             state.login.peranan === 4,
             !i.bayar_konsultasi
           ]) && m('td', m('.button.is-danger', {
-            'data-tooltip': 'klik ganda bila yakin hapus',
+            'data-tooltip': 'double-click if sure to delete',
             ondblclick: e => [
               e.stopPropagation(),
               updateBoth('patients', state.onePatient._id, _.assign(
@@ -106,23 +107,23 @@ _.assign(comp, {
                 }
               ))
             ]
-          }, makeIconLabel('trash-alt', 'Hapus')))
+          }, makeIconLabel('trash-alt', 'Delete')))
         ))
       )
     )),
     state.login.bidang === 1 && m('.button.is-success',
       {onclick: () => state.route = 'igdVisit'},
-      makeIconLabel('file-invoice', 'Kunjungi IGD')
+      makeIconLabel('file-invoice', 'Visit Emergency')
     ),
     makeModal('modalVisit')
   ),
 
   igdVisit: () => m('.content',
-    m('h3', 'Form pendaftaran IGD'),
+    m('h3', 'Emergency Registration Form'),
     m('.box', m(autoForm({
       id: 'igdVisit', autoReset: true,
       schema: _.omit(schemas.rawatJalan, 'klinik'),
-      confirmMessage: 'Yakin untuk mendaftarkan pasien ke IGD?',
+      confirmMessage: 'Are you sure to register this patient to Emergency?',
       action: doc => [
         updateBoth('patients', state.onePatient._id, _.assign(
           state.onePatient, {emergency:

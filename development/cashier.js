@@ -5,12 +5,12 @@
 
 _.assign(comp, {
   cashier: () => state.login.bidang !== 2 ?
-  m('p', 'Hanya untuk user bidang kasir') : m('.content',
+  m('p', 'Only for cashier user') : m('.content',
     state.login.peranan === 4 && reports.cashier(),
-    m('h3', 'Loket Pembayaran'),
+    m('h3', 'Cashier Queue'),
     m('.box', m('table.table.is-striped',
       m('thead', m('tr',
-        ['No. MR', 'Nama Lengkap', 'Tanggal', 'Layanan', 'Tambahan']
+        ['MR Num.' 'Patient Name', 'Visit Date', 'Service', 'Additions']
         .map(i => m('th', i))
       )),
       m('tbody',
@@ -55,7 +55,7 @@ _.assign(comp, {
                     ...(pasien.rawatJalan || []),
                     ...(pasien.emergency || [])
                   ].length === 1, !rawat.bayar_pendaftaran,
-                  ['Daftar pasien baru', tarifKartu]
+                  ['New Patient Registration', tarifKartu]
                 ]) || [] : [],
                 ors([ // tarif layanan rawat (jalan/inap/igd)
                   !rawat.bayar_pendaftaran,
@@ -63,16 +63,16 @@ _.assign(comp, {
                   rawat.bed && rawat.keluar
                 ]) ? ors([
                   rawat.klinik && [
-                    'Konsultasi Poli '+look('klinik', rawat.klinik),
+                    'Clinic Consultation '+look('klinik', rawat.klinik),
                     1000*+look('tarif_klinik', rawat.klinik)
                   ],
                   rawat.bed && [
-                    'Biaya Kamar', wardFee(
+                    'Bed Fee', wardFee(
                       rawat.tanggal_masuk, rawat.keluar,
                       beds[_.get(rawat.bed, 'kelas')].tarif
                     )
                   ],
-                  ['Rawat IGD', tarifIGD]
+                  ['Emergency service', tarifIGD]
                 ]) || [] : [],
                 ...ors([ // tampilkan jika salah 1 kondisi ini terpenuhi
                   ands([rawat.klinik, rawat.soapDokter, !rawat.bayar_konsultasi]), // keluar klinik dan belum bayar
@@ -122,7 +122,7 @@ _.assign(comp, {
                 ] : []
               ].filter(k => k.length).map(k => ({item: k[0], harga: k[1]})),
               bills => state.modalCashier = m('.box',
-                m('h3', 'Konfirmasi Pembayaran'),
+                m('h3', 'Payment Confirmation'),
                 m('p', m('b', [pasien.identitas.nama_lengkap, pasien.identitas.no_mr].join(' / '))),
                 m('table.table', withThis(
                   [...bills, ...(rawat.charges || [])],
@@ -185,14 +185,14 @@ _.assign(comp, {
                       _.assign(state, {modalCashier: null, cashierList: []}),
                       m.redraw()
                     ]},
-                    makeIconLabel('check', 'Sudah bayar')
+                    makeIconLabel('check', 'Payment Confirmed')
                   ),
                   ors([rawat.soapDokter, rawat.observasi]) && m('.button.is-warning',
                     {onclick: () => _.assign(state, {
                       modalCashier: null, route: 'overcharge',
                       onePatient: pasien, oneRawat: rawat
                     })},
-                    makeIconLabel('plus', rawat.charges ? 'Ganti tambahan biaya' : 'Tambahan biaya')
+                    makeIconLabel('plus', rawat.charges ? 'Replace Additional Charges' : 'Additional Chargesb')
                   )
                 )
               )
@@ -203,8 +203,8 @@ _.assign(comp, {
               day(rawat.tanggal || rawat.tanggal_masuk),
               ors([
                 rawat.klinik && look('klinik', rawat.klinik),
-                rawat.bed && 'Rawat Inap',
-                'IGD'
+                rawat.bed && 'Inpatient',
+                'Emergency'
               ]),
               rawat.charges ? (rawat.charges.length + ' item') : ''
             ])

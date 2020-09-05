@@ -9,31 +9,31 @@ _.assign(comp, {
         db.goods.toArray(array => state.goodsList = array),
         db.users.toArray(array => state.userList = array)
       ]},
-      m('h3', 'Rekam Medik Pasien'),
+      m('h3', 'Patient Medical Record'),
       m('.box', m('table.table.is-striped', _.chunk([
-        ['No. MR', id.no_mr],
-        ['Nama Lengkap', id.nama_lengkap],
-        ['Tanggal lahir', day(id.tanggal_lahir)],
-        ['Tempat lahir', id.tempat_lahir],
-        ['Jenis kelamin', look('kelamin', id.kelamin)],
-        ['Agama', look('agama', id.agama)],
-        ['Status nikah', look('nikah', id.nikah)],
-        ['Pendidikan terakhir', look('pendidikan', id.pendidikan)],
-        ['Golongan Darah', look('darah', id.darah)],
-        ['Pekerjaan', look('pekerjaan', id.pekerjaan)],
-        ['Tempat tinggal', id.tempat_tinggal],
-        ['Umur', moment().diff(id.tanggal_lahir, 'years')+' tahun'],
-        ['Nama Bapak', id.keluarga.ayah],
-        ['Nama Ibu', id.keluarga.ibu],
-        ['Nama Suami/Istri', id.keluarga.pasangan],
-        ['No. Handphone', id.kontak]
+        ['MR Num.', id.no_mr],
+        ['Full Name', id.nama_lengkap],
+        ['Date of Birth', day(id.tanggal_lahir)],
+        ['Place of Birth', id.tempat_lahir],
+        ['Gender', look('kelamin', id.kelamin)],
+        ['Religion', look('agama', id.agama)],
+        ['Marital Status', look('nikah', id.nikah)],
+        ['Last Education', look('pendidikan', id.pendidikan)],
+        ['Bloody Type', look('darah', id.darah)],
+        ['Current Occupation', look('pekerjaan', id.pekerjaan)],
+        ['Home Address', id.tempat_tinggal],
+        ['Age', moment().diff(id.tanggal_lahir, 'years')+' tahun'],
+        ['Father Name', id.keluarga.ayah],
+        ['Mother Name', id.keluarga.ibu],
+        ['Spouse Name', id.keluarga.pasangan],
+        ['Phone Num.', id.kontak]
       ], 4).map(i => m('tr', i.map(j =>
         [m('th', j[0]), m('td', j[1])]
       ))))),
       m('p.buttons',
         [
           {
-            label: 'Cetak kartu', icon: 'id-card', color: 'info',
+            label: 'Member Card', icon: 'id-card', color: 'info',
             click: () => makePdf.card(id)
           },
           {
@@ -41,23 +41,23 @@ _.assign(comp, {
             click: () => makePdf.consent(id)
           },
           {
-            label: 'Update pasien', icon: 'edit', color: 'warning',
+            label: 'Update Patient', icon: 'edit', color: 'warning',
             click: () => state.route = 'updatePatient'
           },
           {
-            label: 'Riwayat SOAP', icon: 'bars', color: 'info',
+            label: 'SOAP History', icon: 'bars', color: 'info',
             click: () => state.modalRekapSoap = m('.box',
-              m('h3', 'Rekap SOAP Pasien'),
-              m('p.help', 'Berurut kronologis'),
+              m('h3', 'Patient SOAP Summary'),
+              m('p.help', 'Chronologically sorted'),
               [
                 ...(state.onePatient.rawatJalan || []),
                 ...(state.onePatient.emergency || []),
               ].map(i => m('table.table',
                 i.soapPerawat && i.soapDokter && [
-                  ['Tanggal Kunjungan', day(i.tanggal, true)],
-                  ['Layanan', i.klinik ? look('klinik', i.klinik) : 'Emergency'],
-                  ['Anamnesa Perawat', i.soapPerawat.anamnesa],
-                  ['Diagnosa Dokter', i.soapDokter.diagnosa.map(i => i.text).join(', ')]
+                  ['Visit Date', day(i.tanggal, true)],
+                  ['Service', i.klinik ? look('klinik', i.klinik) : 'Emergency'],
+                  ['Nurse Anamnese', i.soapPerawat.anamnesa],
+                  ['Doctor Diagnosys', i.soapDokter.diagnosa.map(i => i.text).join(', ')]
                 ].map(j => m('tr', m('th', j[0]), m('td', j[1])))
               ))
             )
@@ -72,9 +72,9 @@ _.assign(comp, {
       m('.tabs.is-boxed', m('ul',
         {style: 'margin-left: 0%'},
         _.map({
-          outpatient: ['Riwayat Rawat Jalan', 'walking'],
-          emergency: ['Riwayat IGD', 'ambulance'],
-          inpatient: ['Riwayat Rawat Inap', 'bed']
+          outpatient: ['Outpatient History', 'walking'],
+          emergency: ['Emergency History', 'ambulance'],
+          inpatient: ['Inpatient History', 'bed']
         }, (val, key) => m('li',
           {class: ors([
             key === state.onePatientTab,
@@ -126,10 +126,10 @@ _.assign(comp, {
         state.spm = _.now()
       ]
     },
-    m('h3', 'Form SOAP'),
+    m('h3', 'SOAP Form'),
     m(autoForm({
       id: 'soapMedis', autoReset: true,
-      confirmMessage: 'Yakin untuk menyimpan SOAP?',
+      confirmMessage: 'Are you sure to commit this SOAP?',
       schema: ors([
         state.login.peranan === 2 && schemas.soapPerawat,
         state.login.peranan === 3 && ors([
@@ -182,5 +182,5 @@ _.assign(comp, {
         ]
       )
     }))
-  ),
+  )
 })

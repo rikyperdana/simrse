@@ -2,9 +2,9 @@
 
 _.assign(comp, {
   gizi: () => state.login.bidang !== 10
-  ? m('p', 'Hanya untuk user bidang Gizi')
+  ? m('p', 'Only for nutrition department users')
   : m('.content',
-    m('h1', 'Daftar konsumsi pasien inap'),
+    m('h1', 'Inpatient Consumption List'),
     m('.box', m('table.table.is-striped',
       {oncreate: () => db.patients.filter(
         i => (i.rawatInap || []).filter(
@@ -15,24 +15,24 @@ _.assign(comp, {
         m.redraw()
       ])},
       m('thead', m('tr',
-        m('th', 'Nama Pasien'),
-        m('th', 'Tanggal Masuk')
+        m('th', 'Patient Name'),
+        m('th', 'Entry Date')
       )),
       m('tbody', (state.consumeList || []).map(
         i => m('tr', {onclick: () => [
           state.modalConsume = m('.box',
-            m('h3', 'Rincian kebutuhan gizi'),
+            m('h3', 'Nutritional Need Details'),
             m('table.table',
               m('tr',
-                m('th', 'Nama Pasien'),
+                m('th', 'Patient Name'),
                 m('td', i.identitas.nama_lengkap)
               ),
               withThis(_.last(i.rawatInap), inap => [
                 m('tr',
-                  m('th', 'Tanggal masuk'),
+                  m('th', 'Entry Date'),
                   m('td', day(inap.tanggal_masuk, true))
                 ),
-                m('tr', m('th', 'Kelas/Kamar/Bed'), m('td', [
+                m('tr', m('th', 'Class/Room/Bed'), m('td', [
                   _.upperCase(inap.bed.kelas),
                   _.startCase(inap.bed.kamar),
                   inap.bed.nomor

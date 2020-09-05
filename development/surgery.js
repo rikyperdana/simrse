@@ -4,9 +4,9 @@ _.assign(comp, {
   surgery: () => !ors([
     state.login.bidang === 1,
     _.includes([2, 3], state.login.peranan)
-  ]) ? m('p', 'Hanya untuk tenaga medis dan user pendaftaran')
+  ]) ? m('p', 'Only for registration user, nurses and doctors')
   : m('.content',
-    m('h1', 'Jadwal Instalasi Bedah'),
+    m('h1', 'Surgery Dept. Schedules'),
     m('.box', m('table.table.is-striped',
       {
         oncreate: () =>
@@ -21,7 +21,7 @@ _.assign(comp, {
             ).filter(Boolean)
           ).filter(x => x.length))
       },
-      m('tr', ['Nama Pasien', 'Jadwal Operasi', 'Nama Tindakan'].map(i => m('th', i))),
+      m('tr', ['Patient Name', 'Surgery Schedul', 'Action Name'].map(i => m('th', i))),
       state.surgeryList && _.flatten(state.surgeryList).map(i => m('tr', tds([
         i.identitas.nama_lengkap,
         day(i.jadwal, true),

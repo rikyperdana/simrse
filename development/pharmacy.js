@@ -2,12 +2,12 @@
 
 _.assign(comp, {
   pharmacy: () => state.login.bidang !== 4 ?
-  m('p', 'Hanya untuk user apotik') : m('.content',
+  m('p', 'Only for pharmacist') : m('.content',
     state.login.peranan === 4 && reports.pharmacy(),
-    m('h3', 'Apotik'),
+    m('h3', 'Pharmacy'),
     m('.box', m('table.table.is-striped',
       m('thead', m('tr',
-        ['No. MR', 'Nama Pasien', 'Tanggal berobat', 'Cara bayar', 'Layanan']
+        ['MR Num.', 'Patient Name', 'Visit Date', 'Payment Method', 'Service']
         .map(i => m('th', i))
       )),
       m('tbody',
@@ -126,7 +126,7 @@ _.assign(comp, {
                 m('h4', 'Penyerahan obat'),
                 m('table.table',
                   m('thead', m('tr',
-                    ['Nama obat', 'No. Batch', 'Merek', 'Ambil', 'Kali', 'Dosis', 'Puyer']
+                    ['Med. Name', 'Batch Num.', 'Brand', 'Amount to take', 'Freq.', 'Dosage', 'Powder']
                     .map(j => m('th', j))
                   )),
                   m('tbody', serahList.map(j => m('tr',
@@ -151,7 +151,7 @@ _.assign(comp, {
                       updatedGoods.map(j => updateBoth('goods', j._id, j)),
                       state.modalSerahObat = null, m.redraw()
                     ]},
-                    makeIconLabel('check', 'Selesai')
+                    makeIconLabel('check', 'Complete')
                   ),
                   m('.button.is-danger',
                     {ondblclick: () => updateBoth(
@@ -178,7 +178,7 @@ _.assign(comp, {
                         )
                       }, res => res && [state.modalSerahObat = null, m.redraw()])
                     )},
-                    makeIconLabel('times', 'Batal serah')
+                    makeIconLabel('times', 'Cancel Prescription')
                   )
                 )
               )
@@ -188,8 +188,8 @@ _.assign(comp, {
             day(i.rawat.tanggal, true), look('cara_bayar', i.rawat.cara_bayar),
             ors([
               i.rawat.klinik && look('klinik', i.rawat.klinik),
-              i.rawat.bed && 'Rawat Inap',
-              'IGD'
+              i.rawat.bed && 'Inpatient',
+              'Emergency'
             ])
           ].map(j => m('td', j))
         )),
@@ -198,14 +198,14 @@ _.assign(comp, {
     )),
     m('.button.is-primary',
       {
-        'data-tooltip': 'Untuk menjual obat secara manual',
+        'data-tooltip': 'To sell goods manually',
         onclick: () => [_.assign(state, {route: 'pharmacySale'}), m.redraw()]
       },
-      makeIconLabel('cart-arrow-down', 'Penjualan Bebas')
+      makeIconLabel('cart-arrow-down', 'Manual Goods Sale')
     )
   ),
   pharmacySale: () => m('.content',
-    m('h3', 'Penjualan Bebas Obat & BHP'),
+    m('h3', 'Manual Goods Sale'),
     m(autoForm({
       id: 'pharmacySale',
       oncreate: () =>
@@ -269,9 +269,9 @@ _.assign(comp, {
             )})
           ).filter(Boolean))),
           state.modalPenjualanBebas = m('.box',
-            m('h3', 'Konfirmasi Penjualan'),
+            m('h3', 'Sales Confirmation'),
             m('table.table',
-              m('thead', m('tr', ['Nama Obat', 'No. Batch', 'Jumlah', 'Harga'].map(i => m('th', i)))),
+              m('thead', m('tr', ['Good Name', 'Batch Num.', 'Amount', 'Price'].map(i => m('th', i)))),
               m('tbody', [...serahList].map(i => m('tr', tds([
                 i.nama, i.no_batch, i.jumlah+' unit', currency(i.harga)
               ])))),
@@ -288,13 +288,13 @@ _.assign(comp, {
                 {onclick: () => makePdf.resep(serahList.map(i => _.assign(i, {
                   nama_barang: i.nama, serahkan: i.jumlah
                 })), 'bebas')},
-                makeIconLabel('print', 'Cetak salinan resep')
+                makeIconLabel('print', 'Print Prescription')
               ),
               m('.button.is-primary',
                 {ondblclick: () => updatedGoods[0].map(
                   i => updateBoth('goods', i._id, i)
                 )},
-                makeIconLabel('check', 'Serahkan')
+                makeIconLabel('check', 'Deliver')
               )
             )
           )

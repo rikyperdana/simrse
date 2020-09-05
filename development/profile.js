@@ -2,7 +2,7 @@
 
 _.assign(comp, {
   profile: () => m('.content',
-    m('h1', 'Profil Pengguna'),
+    m('h1', 'User Profile'),
     m('.box', m('table.table.is-striped', m('tbody',
       m('tr',
         m('th', 'Username'),
@@ -13,15 +13,15 @@ _.assign(comp, {
         m('td', '*************'),
       ),
       m('tr',
-        m('th', 'Nama Lengkap'),
+        m('th', 'Full Name'),
         m('td', state.login.nama)
       ),
       m('tr',
-        m('th', 'Bidang'),
+        m('th', 'Department'),
         m('td', look('bidang', state.login.bidang))
       ),
       m('tr',
-        m('th', 'Peranan'),
+        m('th', 'Role'),
         m('td', look('peranan', state.login.peranan))
       )
     ))),
@@ -34,15 +34,15 @@ _.assign(comp, {
               username: {
                 type: String, optional: true,
                 autoform: {
-                  placeholder: 'Bila tidak ingin diganti, kosongkan saja'
+                  placeholder: 'Leave it empty if nothing is to be changed'
                 }
               },
               password: {type: String, optional: true, autoform: {
                 type: 'password',
-                placeholder: 'Bila tidak ingin diganti, kosongkan saja'
+                  placeholder: 'Leave it empty if nothing is to be changed'
               }},
               nama: {type: String, optional: true, label: 'Nama Lengkap', autoform: {
-                placeholder: 'Bila tidak ingin diganti, kosongkan saja'
+                placeholder: 'Leave it empty if nothing is to be changed'
               }}
             },
             action: doc => [
@@ -54,31 +54,31 @@ _.assign(comp, {
             ]
           }))
         )},
-        makeIconLabel('edit', 'Update akun')
+        makeIconLabel('edit', 'Update Account')
       ),
       m('a.button.is-info',
         {
           href: 'https://wa.me/628117696000?text=simrs.dev',
           target: '_blank'
         },
-        makeIconLabel('envelope-open-text', 'Kritik/Saran')
+        makeIconLabel('envelope-open-text', 'Critic/Suggestion')
       ),
       m('a.button.is-link',
         {
           href: 'https://www.youtube.com/watch?v=irSxnKSRIOI&list=PL4oE8OvUySlyfGzQTu8kN9sPWWfcn_wSZ',
           target: '_blank'
         },
-        makeIconLabel('chalkboard-teacher', 'Tutorial')
+        makeIconLabel('chalkboard-teacher', 'Tutorials')
       ),
       m('a.button.is-danger',
         {onclick: () => [
           state.modalLicense = m('.box',
-            m('h3', 'Unlock Lisensi Enterprise'),
-            m('p.help', 'Untuk menghilangkan semua garis batas pada pdf'),
+            m('h3', 'Unlock Enterprise License'),
+            m('p.help', 'To remove all strike lines on all pdf output'),
             m(autoForm({
               id: 'updateLicense',
               schema: {key: {type: String, autoform: {
-                placeholder: 'Dapatkan dari developer'
+                placeholder: 'Get from Developer'
               }}},
               action: ({key}) => key.length === 15 && [
                 withThis(['license', key.split(' ').reverse().join(''), localStorage],

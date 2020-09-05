@@ -4,8 +4,8 @@ var schemas = {
   identitas: {
     no_antrian: {type: String, optional: true, exclude: true},
     no_mr: {
-      type: Number, label: 'No. MR',
-      autoform: {help: 'random dari sistem and boleh diubah'},
+      type: Number, label: 'MR Num.',
+      autoform: {help: 'randomized and may be changed'},
       autoValue: (name, doc, opts) =>
         // jika update, gunakan No. MR yg sudah ada
         opts.id === 'updatePatient' ?
@@ -17,41 +17,41 @@ var schemas = {
       type: Number, optional: true,
       autoform: {type: 'select', options: selects('alias')}
     },
-    nama_lengkap: {type: String, autoform: {placeholder: 'minimal 4 huruf'}},
-    ktp: {type: Number, label: 'No. KTP', optional: true},
-    bpjs: {type: Number, label: 'No. Peserta BPJS', optional: true},
+    nama_lengkap: {type: String, autoform: {placeholder: '4 letters minimum'}},
+    ktp: {type: Number, label: 'Citizen ID', optional: true},
+    bpjs: {type: Number, label: 'Insurance Num.', optional: true},
     tanggal_lahir: {type: Date},
     tempat_lahir: {type: String},
     kelamin: {
-      type: Number, label: 'Jenis Kelamin',
+      type: Number, label: 'Gender',
       autoform: {type: 'select', options: selects('kelamin')}
     },
     agama: {
-      type: Number, optional: true,
+      type: Number, optional: true, label: 'Religion',
       autoform: {type: 'select', options: selects('agama')}
     },
     nikah: {
-      type: Number, label: 'Status Nikah', optional: true,
+      type: Number, label: 'Marital Status', optional: true,
       autoform: {type: 'select', options: selects('nikah')}
     },
     pendidikan: {
-      type: Number, label: 'Pendidikan Terakhir', optional: true,
+      type: Number, label: 'Last Education', optional: true,
       autoform: {type: 'select', options: selects('pendidikan')}
     },
     darah: {
-      type: Number, label: 'Golongan Darah', optional: true,
+      type: Number, label: 'Blood Type', optional: true,
       autoform: {type: 'select', options: selects('darah')}
     },
     pekerjaan: {
-      type: Number, label: 'Pekerjaan sekarang', optional: true,
+      type: Number, label: 'Current Occupation', optional: true,
       autoform: {type: 'select', options: selects('pekerjaan')}
     },
-    tempat_tinggal: {type: String, optional: true, label: 'Alamat tempat tinggal'},
-    kontak: {type: Number, optional: true, label: 'No. Handphone'},
+    tempat_tinggal: {type: String, optional: true, label: 'Home Address'},
+    kontak: {type: Number, optional: true, label: 'Phone Number'},
     keluarga: {type: Object},
-    'keluarga.ayah': {type: String, optional: true, label: 'Nama Ayah'},
-    'keluarga.ibu': {type: String, optional: true, label: 'Nama Ibu'},
-    'keluarga.pasangan': {type: String, optional: true, label: 'Nama Suami/Istri'},
+    'keluarga.ayah': {type: String, optional: true, label: 'Father Name'},
+    'keluarga.ibu': {type: String, optional: true, label: 'Mother Name'},
+    'keluarga.pasangan': {type: String, optional: true, label: 'Spouse Name'},
     petugas: {
       type: String, autoform: {type: 'hidden'},
       autoValue: () =>_.get(state.login, '_id')
@@ -72,12 +72,12 @@ var schemas = {
       autoValue: () => _.now()
     },
     no_antrian: {type: String, optional: true, exclude: true},
-    cara_bayar: {type: Number, autoform: {
+    cara_bayar: {type: Number, label: 'Payment Method', autoform: {
       type: 'select', options: selects('cara_bayar')
     }},
     no_sep: {
       type: String, optional: true,
-      autoform: {placeholder: 'isikan bila cara bayar bpjs'}
+      autoform: {placeholder: 'fill with reference number if payment method is by insurance'}
     },
     klinik: {type: Number, autoform: {
       type: 'select', options: selects('klinik')
@@ -124,13 +124,13 @@ var schemas = {
     'tindakan.$.jadwal': {
       type: Date, optional: true, autoform: {
         type: 'datetime-local',
-        help: 'Hanya untuk penjadwalan kedepan'
+        help: 'Only use if scheduled in the future'
       }
     },
-    bhp: {type: Array, optional: true, label: 'Barang habis pakai'},
+    bhp: {type: Array, optional: true, label: 'Disposable goods'},
     'bhp.$': {type: Object},
     'bhp.$.idbarang': {
-      type: String, label: 'Nama Barang',
+      type: String, label: 'Good Name',
       autoform: {type: 'select', options: () =>
         state.bhpList.map(i =>
           ({value: i._id, label: i.nama})
@@ -141,7 +141,7 @@ var schemas = {
     obat: {type: Array, optional: true},
     'obat.$': {type: Object},
     'obat.$.idbarang': {
-      type: String, label: 'Nama Obat',
+      type: String, label: 'Medicine Name',
       autoform: {type: 'select', options: () =>
         state.drugList.map(i =>
           ({value: i._id, label: i.nama})
@@ -156,10 +156,10 @@ var schemas = {
     'obat.$.aturan': {type: Object, optional: true},
     'obat.$.aturan.kali': {type: Number},
     'obat.$.aturan.dosis': {type: String},
-    radio: {type: Array, optional: true, label: 'Radiologi'},
+    radio: {type: Array, optional: true, label: 'Radiology'},
     'radio.$': {type: Object},
     'radio.$.grup': {type: String, optional: true, autoform: {
-      help: 'Saring berdasarkan kategori',
+      help: 'Filter by category',
       type: 'select', options: () => _.uniq(
         state.references
         .filter(i => i[0] === 'radiologi')
@@ -182,10 +182,10 @@ var schemas = {
         )
     }},
     'radio.$.catatan': {type: String, optional: true},
-    labor: {type: Array, optional: true, label: 'Laboratorium'},
+    labor: {type: Array, optional: true, label: 'Laboratory'},
     'labor.$': {type: Object},
     'labor.$.grup': {type: String, optional: true, autoform: {
-      help: 'Saring berdasarkan kategori',
+      help: 'Filter by category',
       type: 'select', options: () => _.uniq(
         state.references
         .filter(i => i[0] === 'laboratorium')
@@ -215,11 +215,10 @@ var schemas = {
       type: 'select', options: selects('keluar')
     }},
     rujuk: {
-      type: Number, optional: true, label: 'Konsultasikan ke',
+      type: Number, optional: true, label: 'Consult to a clinic',
       autoform: { // hanya munculkan bila pilihan keluar 'rujuk'
-        type: 'select',
-        help: 'Hanya diisi bila pilihan keluar adalah Konsultasikan ke Poliklinik lain',
-        options: selects('klinik')
+        type: 'select', options: selects('klinik'),
+        help: 'Only fill if choice of exit is to consult to other clinic'
       }
     },
     tracer: {type: String, optional: true, label: 'File Tracer'},
@@ -238,7 +237,7 @@ var schemas = {
   },
 
   account: {
-    nama: {type: String, label: 'Nama lengkap'},
+    nama: {type: String, label: 'Full Name'},
     username: {type: String},
     password: {type: String, autoform: {type: 'password'}},
     peranan: {type: Number, autoform: {
@@ -249,7 +248,7 @@ var schemas = {
     }},
     poliklinik: {type: Number, optional: true, autoform: {
       type: 'select', options: selects('klinik'),
-      help: 'hanya diisi bila pilihan bidang Rawat Jalan'
+      help: 'Only fill if the user belong to a clinic'
     }},
     keaktifan: {type: Number, autoform: {
       type: 'select', options: selects('keaktifan')
@@ -298,7 +297,7 @@ var schemas = {
     masuk: {type: Date},
     kadaluarsa: {type: Date},
     stok: {type: Object},
-    'stok.gudang': {type: Number, autoform: {help: 'Berdasarkan unit terkecil'}},
+    'stok.gudang': {type: Number, autoform: {help: 'Based on smallest unit'}},
     harga: {type: Object},
     'harga.beli': {type: Number},
     'harga.jual': {type: Number},
@@ -375,7 +374,7 @@ var schemas = {
   overcharge: {
     charges: {type: Array, optional: true},
     'charges.$': {type: Object},
-    'charges.$.item': {type: String, label: 'Nama item'},
+    'charges.$.item': {type: String, label: 'Fee name'},
     'charges.$.harga': {type: Number}
   },
   confirmRadiology: {
@@ -420,7 +419,7 @@ var schemas = {
   },
   gizi: {
     konsumsi: {
-      type: String, label: 'Konsumsi gizi untuk pasien',
+      type: String, label: 'Nutrition requirement',
       optional: true, autoform: {type: 'textarea'}
     }
   }

@@ -2,10 +2,10 @@
 
 _.assign(comp, {
   registration: () => state.login.bidang !== 1 ?
-  m('p', 'Hanya untuk user pendaftaran') : m('.content',
-    m('h1', 'Pencarian Pasien'),
+  m('p', 'Only for registration user') : m('.content',
+    m('h1', 'Patient Search'),
     m('.control.is-expanded', m('input.input.is-fullwidth', {
-      type: 'text', placeholder: 'Cari dengan nama lengkap atau No. MR',
+      type: 'text', placeholder: 'Find by Full Name or MR Num.',
       onkeypress: e => [
         ands([
           e.key === 'Enter',
@@ -25,10 +25,10 @@ _.assign(comp, {
       ]
     })), m('br'),
     state.loading && m('progress.progress.is-small.is-primary'),
-    state.searchPatients && m('p.help', '* Berurut berdasarkan tanggal lahir'),
+    state.searchPatients && m('p.help', '* Sorted by Date of Birth'),
     m('.box', m('table.table.is-striped',
       m('thead', m('tr',
-        ['Kunjungan Terakhir', 'No. MR', 'Nama lengkap', 'Tanggal lahir', 'Tempat lahir']
+        ['Last Visit', 'MR Num.', 'Full Name', 'Date of Birth', 'Place of Birth']
         .map(i => m('th', i))
       )),
       m('tbody',
@@ -51,15 +51,15 @@ _.assign(comp, {
       {onclick: () => _.assign(state, {
         route: 'newPatient', searchPatients: null
       })},
-      makeIconLabel('user-plus', 'Pasien baru')
+      makeIconLabel('user-plus', 'New Patient')
     )
   ),
 
   newPatient: () => m('.content',
-    m('h3', 'Pendaftaran Pasien Baru'),
+    m('h3', 'New Patient Registration'),
     m(autoForm({
       id: 'newPatient', schema: schemas.identitas,
-      confirmMessage: 'Yakin ingin menambahkan pasien BARU?',
+      confirmMessage: 'Are you sure to register NEW patient?',
       action: doc => withThis(
         {identitas: doc, _id: randomId()}, obj => [
           insertBoth('patients', obj),
@@ -74,7 +74,7 @@ _.assign(comp, {
   ),
 
   updatePatient: () => m('.content',
-    m('h3', 'Update identitas pasien'),
+    m('h3', 'Update Patient Identity'),
     m(autoForm({
       id: 'updatePatient', schema: schemas.identitas,
       doc: state.onePatient.identitas,
@@ -88,11 +88,11 @@ _.assign(comp, {
   ),
 
   poliVisit: () => m('.content',
-    m('h3', 'Form Pendaftaran Poli'),
+    m('h3', 'Clinic Registration Form'),
     m('.box', m(autoForm({
       id: 'poliVisit', autoReset: true,
       schema: schemas.rawatJalan,
-      confirmMessage: 'Yakin untuk mendaftarkan pasien ke klinik?',
+      confirmMessage: 'Are you sure to register the patient to this clinic?',
       action: doc => db.patients.filter(i =>
         i.rawatJalan && i.rawatJalan.filter(j => ands([
           j.klinik === 1,
