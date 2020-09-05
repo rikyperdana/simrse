@@ -4,25 +4,25 @@ var selects = name => _.reduce(
   {
     alias: ['mr.', 'mrs.', 'ms.', 'child', 'baby'],
     kelamin: ['male', 'female'],
-    agama: ['islam', 'katolik', 'protestan', 'budha', 'hindu', 'konghuchu'],
-    nikah: ['nikah', 'belum_nikah', 'janda', 'duda'],
-    pendidikan: ['sd', 'smp', 'sma', 'diploma', 's1', 's2', 's3', 'tidak_sekolah'],
+    agama: ['islam', 'chatolic', 'protestant', 'budha', 'hindu', 'konghuchu'],
+    nikah: ['married', 'single', 'widow'],
+    pendidikan: ['primary_school', 'junior_high_school', 'high_school', 'diploma', 'bachelor', 'postgraduate', 'doctorate', 'no school'],
     darah: ['a', 'b', 'ab', 'o'],
-    pekerjaan: ['pns', 'swasta', 'wiraswasta', 'tni', 'polri', 'pensiunan', 'lainnya'],
-    cara_bayar: ['umum', 'bpjs', 'asuransi'],
-    kodepoli:     ['int',            'ana',  'obg',   'bed',   'gig'], // referensi INACBGs
-    klinik:       ['penyakit_dalam', 'anak', 'obgyn', 'bedah', 'gigi', 'umum'],
-    tarif_klinik: [ 95,               95,     95,      95,      95,     45],
-    rujukan: ['datang_sendiri', 'rs_lain', 'puskesmas', 'faskes_lainnya'],
-    keluar: ['pulang', 'konsultasikan_ke_poli_lain', 'inap'],
-    jenis_barang: ['Obat', 'BHP', 'Logistik'],
-    satuan: ['botol', 'vial', 'ampul', 'pcs', 'sachet', 'tube', 'supp', 'tablet', 'minidose', 'pot', 'turbuhaler', 'kaplet', 'kapsul', 'bag', 'pen', 'rectal', 'flash', 'cream', 'nebu', 'galon', 'lembar', 'roll', 'liter', 'cup', 'pasang', 'bungkus', 'box', 'syringe'],
-    boolean: ['ya', 'tidak'],
-    konfirmasi: ['proses', 'tolak'],
-    peranan: ['petugas', 'perawat', 'dokter', 'admin'],
-    bidang: ['pendaftaran', 'kasir', 'farmasi', 'apotik', 'manajemen', 'rawat_jalan', 'rawat_inap', 'laboratorium', 'radiologi', 'gizi'],
-    keaktifan: ['aktif', 'non-aktif'],
-    pengarsipan: ['Rumah Sakit', 'Pribadi']
+    pekerjaan: ['government_official', 'private', 'enterpreneur', 'army', 'police', 'retiree', 'others'],
+    cara_bayar: ['self_pay', 'insurance'],
+    // kodepoli:     ['int',            'ana',  'obg',   'bed',   'gig'], // referensi INACBGs
+    klinik:       ['internal_disease', 'pediatrician', 'obgyn', 'surgery', 'dentist', 'general'],
+    tarif_klinik: [ 95,                 95,             95,      95,        95,        45],
+    rujukan: ['came_alone', 'other_hospital', 'public_health_center', 'other_facility'],
+    keluar: ['discharged', 'consult_to_other_clinic', 'to be inpatient'],
+    jenis_barang: ['Medicine', 'consumables', 'logistic'],
+    satuan: ['bottle', 'vial', 'ampoule', 'pcs', 'sachets', 'tube', 'supp', 'tablet', 'minidose', 'pot', 'turbuhaler', 'caplet', 'capsule', 'bag', 'pen', 'rectal', 'flash', 'cream', 'nebu', 'gallon', 'sheet', 'roll', 'liter', 'cup', 'pair', 'wrap', 'box', 'syringe'],
+    boolean: ['yes', 'no'],
+    konfirmasi: ['process', 'decline'],
+    peranan: ['staff', 'nurse', 'doctor', 'admin'],
+    bidang: ['registration', 'cashier', 'storage', 'pharmacy', 'management', 'outpatient', 'inpatient', 'laboratory', 'radiology', 'nutrition_dept'],
+    keaktifan: ['active', 'inactive'],
+    pengarsipan: ['hospital', 'self_keep']
   }, (res, inc, key) =>
     _.merge(res, {[key]: () => _.map(inc, (val, key) =>
       ({label: _.startCase(val), value: key+1})

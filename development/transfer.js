@@ -5,9 +5,9 @@ _.assign(comp, {
     _.includes([3, 4], state.login.bidang),
     _.includes([2, 3], state.login.peranan)
   ])
-  ? m('p', 'Hanya untuk user farmasi, apotik dan petugas medis')
+  ? m('p', 'Only for storage user, pharmacist, nurses and doctors')
   : m('.content',
-    m('h3', 'Daftar antrian amprah'),
+    m('h3', 'Transfer Queue List'),
     m('.box', m('table.table.is-striped',
       {onupdate: () => [
         db.users.toArray(array =>
@@ -28,7 +28,7 @@ _.assign(comp, {
         ])
       ]},
       m('thead', m('tr',
-        ['Nama barang', 'No. Batch', 'Peminta', 'Asal Ruangan', 'Jumlah minta', 'Tanggal diminta']
+        ['Good Name', 'Batch Num.', 'Requester', 'Request Origin', 'Amount Requested', 'Request Date']
         .map((i => m('th', i)))
       )),
       m('tbody', state.transferList &&
@@ -37,10 +37,10 @@ _.assign(comp, {
           state.login.bidang === 3 &&
           _.assign(state, {
             oneAmprah: i, modalResponAmprah: m('.box',
-              m('h4', 'Respon permintaan barang'),
+              m('h4', 'Request Response'),
               m('table.table',
                 m('thead', m('tr',
-                  ['Nama barang', 'No. Batch', 'Stok gudang', 'Jumlah minta']
+                  ['Good Name', 'Batch Num.', 'Storage stock', 'Amount Requested']
                   .map(j => m('th', j))
                 )),
                 m('tbody', m('tr', tds([
@@ -84,10 +84,10 @@ _.assign(comp, {
       makeModal('modalResponAmprah')
     )),
     m('p'),
-    m('h3', 'Daftar riwayat amprah'),
+    m('h3', 'Transfer history list'),
     m('.box', m('table.table.is-striped',
       m('thead', m('tr',
-        ['Nama barang', 'No. Batch', 'Peminta', 'Jumlah minta', 'Tanggal diminta', 'Penyerah', 'Jumlah serah', 'Tanggal serah']
+        ['Good Name', 'Batch Num.', 'Requester', 'Amount Requested', 'Request Date', 'Giver', 'Amount Given', 'Transfer Date']
         .map(i => m('th', i))
       )),
       m('tbody',
