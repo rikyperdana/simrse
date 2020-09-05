@@ -53,7 +53,7 @@ _.assign(comp, {
             ])})
           }) && m.redraw()},
           tds([
-            hari(ors([
+            day(ors([
               _.get(i, 'rawat.tanggal'),
               _.get(i, 'observasi.tanggal')
             ]), true),
@@ -68,7 +68,7 @@ _.assign(comp, {
               _.get(i, 'rawat.soapDokter.dokter'),
               _.get(i, 'observasi.dokter')
             ])),
-            hari(ors([
+            day(ors([
               _.get(i, 'rawat.soapDokter.labor') &&
               i.rawat.soapDokter.labor.find(j => j.tanggal),
               _.get(i, 'observasi.labor') &&

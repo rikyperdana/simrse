@@ -110,7 +110,7 @@ _.assign(comp, {
           )},
           // baris tabel yang ditampilkan
           tds([
-            hari(ors([
+            day(ors([
               _.get(i, 'rawat.tanggal'),
               _.get(i, 'observasi.tanggal')
             ]), true),
@@ -127,7 +127,7 @@ _.assign(comp, {
             ]),
             _.startCase(i.radio.grup),
             lookReferences(i.radio.idradio).nama,
-            i.radio.konfirmasi === 1 && hari(i.radio.tanggal, true)
+            i.radio.konfirmasi === 1 && day(i.radio.tanggal, true)
           ])
         ))
       ),

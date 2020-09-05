@@ -36,39 +36,39 @@ var reports = {
             ).filter(l => l.length))
             .sort((a, b) => a.rawat.tanggal - b.rawat.tanggal)
             .map(i => [
-              hari(i.rawat.tanggal || i.rawat.tanggal_masuk),
+              day(i.rawat.tanggal || i.rawat.tanggal_masuk),
               String(i.pasien.identitas.no_mr),
               i.pasien.identitas.nama_lengkap,
               ors([ // pilihan layanan
                 i.rawat.klinik && look('klinik', i.rawat.klinik),
                 i.rawat.bed && 'Rawat Inap', 'IGD'
               ]),
-              rupiah(ors([ // tarif layanan tersebut
+              currency(ors([ // tarif layanan tersebut
                 i.rawat.klinik &&
                 +look('tarif_klinik', i.rawat.klinik)*1000,
-                i.rawat.bed && tarifInap(
+                i.rawat.bed && wardFee(
                   i.rawat.tanggal_masuk, i.rawat.keluar,
                   beds[_.get(i.rawat.bed, 'kelas')].tarif
                 ),
                 tarifIGD
               ])),
-              rupiah(_.get(i, 'rawat.soapDokter.obat') ? _.sum(
+              currency(_.get(i, 'rawat.soapDokter.obat') ? _.sum(
                 i.rawat.soapDokter.obat.map(j => j.harga)
               ) : 0),
-              rupiah(_.get(i, 'rawat.soapDokter.tindakan') ? _.sum(
+              currency(_.get(i, 'rawat.soapDokter.tindakan') ? _.sum(
                 i.rawat.soapDokter.tindakan.map(
                   j => +_.get(lookReferences(j.idtindakan), 'harga')
                 )
               ) : 0),
-              rupiah(_.sum(
+              currency(_.sum(
                 (i.rawat.charges || [])
                 .map(j => j.harga)
               )),
-              rupiah(_.sum([
+              currency(_.sum([
                 ors([
                   i.rawat.klinik &&
                   +look('tarif_klinik', i.rawat.klinik)*1000,
-                  i.rawat.bed && tarifInap(
+                  i.rawat.bed && wardFee(
                     i.rawat.tanggal_masuk, i.rawat.keluar,
                     beds[_.get(i.rawat.bed, 'kelas')].tarif
                   ),
@@ -120,7 +120,7 @@ var reports = {
           .flatMap(({pasien, rawat}) =>
             _.get(rawat, 'soapDokter.obat') &&
             rawat.soapDokter.obat.map(i => i.harga && [
-              hari(rawat.tanggal),
+              day(rawat.tanggal),
               pasien.identitas.no_mr,
               pasien.identitas.nama_lengkap,
               ors([
@@ -131,7 +131,7 @@ var reports = {
               lookUser(rawat.soapDokter.dokter),
               lookGoods(i.idbarang).nama,
               i.jumlah+' '+look('satuan', lookGoods(i.idbarang).satuan),
-              rupiah(i.harga),
+              currency(i.harga),
               look('cara_bayar', rawat.cara_bayar),
               lookUser(_.get(rawat, 'soapDokter.apoteker'))
             ]).filter(Boolean)
@@ -158,7 +158,7 @@ var reports = {
                 rawat.soapDokter,
                 rawat.tanggal > date.start && rawat.tanggal < date.end
               ]) && [
-                hari(rawat.tanggal),
+                day(rawat.tanggal),
                 pasien.identitas.no_mr.toString(),
                 pasien.identitas.nama_lengkap,
                 lookUser(_.get(rawat, 'soapPerawat.perawat')),
@@ -191,7 +191,7 @@ var reports = {
                 rawat.tanggal_masuk > date.start &&
                 rawat.tanggal_masuk < date.end
               ]) && [
-                hari(rawat.tanggal_masuk),
+                day(rawat.tanggal_masuk),
                 pasien.identitas.no_mr.toString(),
                 pasien.identitas.nama_lengkap,
                 rawat.observasi.map(i =>
@@ -230,7 +230,7 @@ var reports = {
           ]))
           .sort((a, b) => a.rawat.tanggal - b.rawat.tanggal)
           .map(({pasien, rawat}) => [
-            hari(rawat.tanggal),
+            day(rawat.tanggal),
             look('klinik', rawat.klinik),
             pasien.identitas.no_mr.toString(),
             pasien.identitas.nama_lengkap,

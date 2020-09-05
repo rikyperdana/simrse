@@ -185,7 +185,7 @@ _.assign(comp, {
           ))},
           [
             i.pasien.identitas.no_mr, i.pasien.identitas.nama_lengkap,
-            hari(i.rawat.tanggal, true), look('cara_bayar', i.rawat.cara_bayar),
+            day(i.rawat.tanggal, true), look('cara_bayar', i.rawat.cara_bayar),
             ors([
               i.rawat.klinik && look('klinik', i.rawat.klinik),
               i.rawat.bed && 'Rawat Inap',
@@ -273,9 +273,9 @@ _.assign(comp, {
             m('table.table',
               m('thead', m('tr', ['Nama Obat', 'No. Batch', 'Jumlah', 'Harga'].map(i => m('th', i)))),
               m('tbody', [...serahList].map(i => m('tr', tds([
-                i.nama, i.no_batch, i.jumlah+' unit', rupiah(i.harga)
+                i.nama, i.no_batch, i.jumlah+' unit', currency(i.harga)
               ])))),
-              m('tr', tds([m('b', 'Total'), '', '', rupiah(_.sum(serahList.map(i => i.harga)))]))
+              m('tr', tds([m('b', 'Total'), '', '', currency(_.sum(serahList.map(i => i.harga)))]))
             ),
             m('.buttons',
               /*

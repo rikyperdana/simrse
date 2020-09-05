@@ -2,9 +2,9 @@
 
 _.assign(comp, {
   inpatient: () => !_.includes([2, 3], state.login.peranan) ?
-  m('p', 'Hanya untuk tenaga medis') : m('.content',
+  m('p', 'Only for doctors and nurses') : m('.content',
     reports.inpatient(),
-    m('h3', 'Daftar Admisi Rawat Inap'),
+    m('h3', 'Admission list for inpatients'),
     m('.box', m('table.table.is-striped',
       {onupdate: () =>
         db.patients.toArray(array =>
@@ -24,7 +24,7 @@ _.assign(comp, {
         )
       },
       m('thead', m('tr',
-        ['No. MR', 'Nama Pasien', 'Tanggal admisi', 'Sumber admisi', 'Dokter']
+        ['MR Num.', 'Patient Name', 'Admission Date', 'Admission source', 'Admitting Doctor']
         .map(i => m('th', i))
       )),
       m('tbody',
@@ -40,10 +40,10 @@ _.assign(comp, {
             m('h4', 'Inapkan pasien'),
             m('table.table',
               [
-                ['Nama Lengkap', i.pasien.identitas.no_mr],
-                ['Cara bayar', look('cara_bayar', i.inap.cara_bayar)],
-                ['Anamnesa Perawat', _.get(i, 'inap.soapPerawat.anamnesa')],
-                ['Anamnesa Dokter', _.get(i, 'inap.soapDokter.anamnesa')],
+                ['Full Name', i.pasien.identitas.no_mr],
+                ['Payment method', look('cara_bayar', i.inap.cara_bayar)],
+                ['Nurse Anamnese', _.get(i, 'inap.soapPerawat.anamnesa')],
+                ['Doctor Anamnese', _.get(i, 'inap.soapDokter.anamnesa')],
               ].map(j => m('tr', m('th', j[0]), m('td', j[1]))),
             ),
             m(autoForm({
@@ -69,8 +69,8 @@ _.assign(comp, {
         tds([
           i.pasien.identitas.no_mr,
           i.pasien.identitas.nama_lengkap,
-          hari(i.inap.tanggal, true),
-          _.get(i.inap, 'klinik') ? 'Rawat Jalan' : 'IGD',
+          day(i.inap.tanggal, true),
+          _.get(i.inap, 'klinik') ? 'Outpatient' : 'Emergency',
           lookUser(_.get(i.inap, 'soapDokter.dokter'))
         ])
       )))
@@ -78,8 +78,8 @@ _.assign(comp, {
     makeModal('admissionModal'),
     m('br'),
 
-    m('h3', 'Daftar Pasien Menginap'),
-    m('p.help', '* Urut berdasarkan tanggal masuk terbaru'),
+    m('h3', 'Inpatient in ward'),
+    m('p.help', '* Sort by latest entry'),
     m('.box', m('table.table.is-striped',
       {onupdate: () =>
         db.patients.toArray(array => [
@@ -91,7 +91,7 @@ _.assign(comp, {
         ]),
       },
       m('thead', m('tr',
-        ['No. MR', 'Nama Pasien', 'Kelas / Kamar / Nomor', 'Tanggal Masuk']
+        ['MR Num.', 'Patient Name', 'Class / Room / Bed Num', 'Entry date']
         .map(i => m('th', i))
       )),
       m('tbody',
@@ -115,7 +115,7 @@ _.assign(comp, {
                 _.startCase(bed.kamar),
                 bed.nomor
               ].join(' / '),
-              hari(_.get(_.last(i.rawatInap), 'tanggal_masuk'), true)
+              day(_.get(_.last(i.rawatInap), 'tanggal_masuk'), true)
             ])
           )
         ))
@@ -126,7 +126,7 @@ _.assign(comp, {
   inpatientHistory: () => m('.content',
     m('.box', m('table.table.is-striped',
       m('thead', m('tr',
-        ['Tanggal masuk', 'Kelas / Kamar / Nomor']
+        ['Entry date', 'Class / Room / Bed Num.']
         .map(i => m('th', i))
       )),
       m('tbody',
@@ -134,23 +134,23 @@ _.assign(comp, {
           {ondblclick: () =>
              // untuk melihat 1 rekaman observasi
             state.modalObservasi = _.includes([2, 3, 4], state.login.peranan) && m('.box',
-              m('h3', 'Riwayat Observasi'),
+              m('h3', 'Observation History'),
               Boolean(i.observasi.length) && m(
                 'p.help.is-italic.has-text-info',
-                'klik-ganda pada salah satu observasi untuk melihat rincian'
+                'double-click on any observation for details'
               ),
               m('table.table',
                 m('thead', m('tr',
-                  ['Waktu', 'Anamnesa', 'Petugas']
+                  ['Time', 'Anamnese', 'Medic']
                   .map(j => m('th', j))
                 )),
                 m('tbody', i.observasi.map(j => m('tr',
                   {ondblclick: () => [
                     state.modalObservasi = null,
                     state.modalSoap = m('.box',
-                      m('h4', 'Rincian SOAP'),
+                      m('h4', 'SOAP Details'),
                       m('table.table',
-                        m('tr', m('th', 'Waktu observasi'), m('td', hari(j.tanggal, true))),
+                        m('tr', m('th', 'Observation Time'), m('td', day(j.tanggal, true))),
                         j.diagnosa ? makeRincianSoapDokter(j) : makeRincianSoapPerawat(j)
                       ),
                       m('.button.is-info',
@@ -158,12 +158,12 @@ _.assign(comp, {
                           state.onePatient.identitas,
                           j.perawat ? {soapPerawat: j} : {soapDokter: j}
                         )},
-                        makeIconLabel('print', 'Cetak SOAP')
+                        makeIconLabel('print', 'Print SOAP')
                       )
                     ), m.redraw()
                   ]},
                   tds([
-                    hari(j.tanggal), j.anamnesa,
+                    day(j.tanggal), j.anamnesa,
                     lookUser(j.perawat || j.dokter)
                   ])
                 )))
@@ -176,7 +176,7 @@ _.assign(comp, {
                       route: 'formSoap', oneInap: i, modalObservasi: null
                     }), m.redraw()
                   ]},
-                  makeIconLabel('user-md', 'Tambah observasi')
+                  makeIconLabel('user-md', 'Add Observation')
                 ),
                 m('.button.is-danger',
                   {ondblclick: () => [
@@ -191,14 +191,14 @@ _.assign(comp, {
                     state.modalObservasi = null,
                     m.redraw()
                   ]},
-                  makeIconLabel('door-open', 'Pulangkan pasien')
+                  makeIconLabel('door-open', 'Discharge Patient')
                 )
               )
             )
           },
           makeModal('modalSoap'),
           tds([
-            hari(i.tanggal_masuk),
+            day(i.tanggal_masuk),
             i.bed && [
               _.upperCase(i.bed.kelas),
               _.startCase(i.bed.kamar),
@@ -214,8 +214,8 @@ _.assign(comp, {
   beds: () => !ors([
     _.includes([2, 3], state.login.peranan),
     _.includes([1], state.login.bidang)
-  ]) ? m('p', 'Hanya untuk tenaga medis') : m('.content',
-    m('h3', 'Daftar Ketersediaan Bed'),
+  ]) ? m('p', 'Only for nurses and doctors') : m('.content',
+    m('h3', 'Available beds list'),
     m('.box', m('table.table.is-striped',
       {onupdate: () =>
         db.patients.toArray(array => [
@@ -226,7 +226,7 @@ _.assign(comp, {
           ), m.redraw()
         ]),
       },
-      m('tr', ['Kelas', 'Kamar', 'No. Bed', 'Penginap'].map(i => m('th', i))),
+      m('tr', ['Class', 'Room', 'Bed Num.', 'Patient'].map(i => m('th', i))),
       state.inpatientList && _.flattenDepth(
         _.map(beds, (i, j) => _.map(
           i.kamar, (k, l) => _.range(k).map(m => [

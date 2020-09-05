@@ -12,7 +12,7 @@ randomId = () =>
     Math.random().toString(36).slice(2)
   ).join(''),
 
-hari = (timestamp, hour) =>
+day = (timestamp, hour) =>
   timestamp && moment(timestamp)
   .format('Do MMMM YYYY'+(hour ? ', hh:mm' : '')),
 
@@ -26,8 +26,8 @@ startOfTheDay = timestamp => +moment(
 
 tomorrow = timestamp => timestamp + 86400000,
 
-rupiah = num =>
-  'Rp '+numeral(num || 0).format('0,0'),
+currency = num =>
+  '$ '+numeral(num || 0).format('0,0'),
 
 dbCall = (body, action) =>
   io().emit('dbCall', body, action),
@@ -63,10 +63,10 @@ deleteBoth = (collName, _id, cb) => dbCall({
   db[collName].delete(_id)
 ]),
 
-tarifInap = (masuk, keluar, tarif) =>
-  (daysDifference(keluar - masuk) || 1) * 1000 * +tarif,
+wardFee = (enter, exit, fee) =>
+  (daysDifference(enter - exit) || 1) * 1000 * +fee,
 
-tarifIGD = 45000, tarifKartu = 8000,
+emergencyFee = 45000, tarifKartu = 8000,
 
 collNames = ['patients', 'goods', 'references', 'users', 'queue'],
 
@@ -74,44 +74,44 @@ state = {route: 'dashboard'}, comp = {},
 
 menus = {
   registration: {
-    full: 'Pendaftaran', icon: 'address-book',
+    full: 'Registration', icon: 'address-book',
     children: {
-      icd: {full: 'Kodifikasi', icon: 'code'},
-      queue: {full: 'Antrian', icon: 'stream'}
+      icd: {full: 'Codification', icon: 'code'},
+      queue: {full: 'Queue', icon: 'stream'}
     }
   },
-  emergency: {full: 'IGD', icon: 'heartbeat'},
-  outpatient: {full: 'Rawat Jalan', icon: 'walking'},
+  emergency: {full: 'Emergency', icon: 'heartbeat'},
+  outpatient: {full: 'Outpatient', icon: 'walking'},
   inpatient: {
-    full: 'Rawat Inap', icon: 'bed',
+    full: 'Inpatient', icon: 'bed',
     children: {
-      beds: {full: 'Daftar Kamar', icon: 'bed'},
-      surgery: {full: 'Antrian Bedah', icon: 'procedures'},
-      gizi: {full: 'Gizi', icon: 'utensils'}
+      beds: {full: 'Bed List', icon: 'bed'},
+      surgery: {full: 'Surgery Queue', icon: 'procedures'},
+      gizi: {full: 'Nutrition', icon: 'utensils'}
     }
   },
-  cashier: {full: 'Kasir', icon: 'cash-register'},
+  cashier: {full: 'Cashier', icon: 'cash-register'},
   storage: {
     full: 'Storage', icon: 'cubes',
     children: {
-      transfer: {full: 'Amprah', icon: 'exchange-alt'}
+      transfer: {full: 'Transfer', icon: 'exchange-alt'}
     }
   },
-  pharmacy: {full: 'Apotik', icon: 'pills'},
-  laboratory: {full: 'Laboratorium', icon: 'flask'},
-  radiology: {full: 'Radiologi', icon: 'radiation'},
+  pharmacy: {full: 'Pharmacy', icon: 'pills'},
+  laboratory: {full: 'Laboratory', icon: 'flask'},
+  radiology: {full: 'Radiology', icon: 'radiation'},
   management: {
-    full: 'Manajemen', icon: 'users',
+    full: 'Management', icon: 'users',
     children: {
-      users: {full: 'Pengguna', icon: 'users'},
-      references: {full: 'Referensi', icon: 'file-contract'}
+      users: {full: 'Users', icon: 'users'},
+      references: {full: 'Reference', icon: 'file-contract'}
     }
   },
-  gizi: {full: 'Gizi', icon: 'utensils'},
-  cssd: {full: 'Laundry', icon: 'tshirt'}
+  gizi: {full: 'Nutrition', icon: 'utensils'},
+  cssd: {full: 'CSSD', icon: 'tshirt'}
 },
 
-db = new Dexie('simrs'),
+db = new Dexie('simrse'),
 
 getDifference = name =>
   db[name].toArray(array =>

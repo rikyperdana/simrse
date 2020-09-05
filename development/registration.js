@@ -39,9 +39,9 @@ _.assign(comp, {
             route: 'onePatient', onePatient: i
           })},
           tds([
-            hari(_.get(_.last([...(i.rawatJalan || []), ...(i.emergency || [])]), 'tanggal')),
+            day(_.get(_.last([...(i.rawatJalan || []), ...(i.emergency || [])]), 'tanggal')),
             i.identitas.no_mr, i.identitas.nama_lengkap,
-            hari(i.identitas.tanggal_lahir), i.identitas.tempat_lahir
+            day(i.identitas.tanggal_lahir), i.identitas.tempat_lahir
           ])
         ))
       )

@@ -30,7 +30,7 @@ _.assign(comp, {
               withThis(_.last(i.rawatInap), inap => [
                 m('tr',
                   m('th', 'Tanggal masuk'),
-                  m('td', hari(inap.tanggal_masuk, true))
+                  m('td', day(inap.tanggal_masuk, true))
                 ),
                 m('tr', m('th', 'Kelas/Kamar/Bed'), m('td', [
                   _.upperCase(inap.bed.kelas),
@@ -38,7 +38,7 @@ _.assign(comp, {
                   inap.bed.nomor
                 ].join('/'))),
                 inap.observasi.map(j => j.konsumsi && m('tr', tds([
-                  hari(j.tanggal, true),
+                  day(j.tanggal, true),
                   [lookUser(j.dokter), j.konsumsi].join(': ')
                 ])))
               ]),
@@ -46,7 +46,7 @@ _.assign(comp, {
           )
         ]}, tds([
           i.identitas.nama_lengkap,
-          hari(_.get(_.last(i.rawatInap), 'tanggal_masuk'), true)
+          day(_.get(_.last(i.rawatInap), 'tanggal_masuk'), true)
         ]))
       ))
     )),

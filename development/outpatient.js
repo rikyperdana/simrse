@@ -33,9 +33,9 @@ _.assign(comp, {
             route: 'onePatient', onePatient: i
           })},
           tds([
-            hari(_.get(_.last(i.rawatJalan), 'tanggal'), true),
+            day(_.get(_.last(i.rawatJalan), 'tanggal'), true),
             i.identitas.no_mr, i.identitas.nama_lengkap,
-            hari(i.identitas.tanggal_lahir),
+            day(i.identitas.tanggal_lahir),
             i.identitas.tempat_lahir
           ])
         ))
@@ -61,7 +61,7 @@ _.assign(comp, {
             ors([i.cara_bayar !== 1, i.bayar_pendaftaran]) && m('.box',
               m('h3', 'Rincian Kunjungan Rawat Jalan'),
               m('table.table',
-                m('tr', m('th', 'Tanggal'), m('td', hari(i.tanggal, true))),
+                m('tr', m('th', 'Tanggal'), m('td', day(i.tanggal, true))),
                 m('tr', m('th', 'Poliklinik'), m('td', look('klinik', i.klinik))),
                 m('tr', m('th', 'Cara bayar'), m('td', look('cara_bayar', i.cara_bayar))),
                 makeRincianSoapPerawat(i.soapPerawat),
@@ -98,7 +98,7 @@ _.assign(comp, {
             )
           ]},
           tds([
-            hari(i.tanggal),
+            day(i.tanggal),
             look('klinik', i.klinik),
             look('cara_bayar', i.cara_bayar),
             lookUser(_.get(i, 'soapPerawat.perawat')),

@@ -23,7 +23,7 @@ makeModal = name => m('.modal',
 ), // BUG: yg di dalam modal tidak mempan m.redraw()
 
 makeReport = (name, action, selections) => m('.box',
-  m('h4', 'Unduh Laporan '+name),
+  m('h4', 'Download report '+name),
   m('form.field-body', {onsubmit: action},
     m('.field', m('.control.is-expanded',
       m('input.input', {type: 'date', name: 'start'})
@@ -50,7 +50,7 @@ defaultStyle = objDB => 1001100111110111110101101 ? // dbConnector?
 ) : objDB,
 
 makeRincianSoapPerawat = soapPerawat => soapPerawat && [
-  m('tr', m('th', 'Anamnesa Perawat'), m('td', soapPerawat.anamnesa)),
+  m('tr', m('th', 'Nurse Anamnese'), m('td', soapPerawat.anamnesa)),
   withThis(
     _.get(soapPerawat, 'fisik.tekanan_darah'),
     tensi => m('tr',
@@ -70,13 +70,13 @@ makeRincianSoapPerawat = soapPerawat => soapPerawat && [
 ],
 
 makeRincianSoapDokter = soapDokter => soapDokter && [
-  m('tr', m('th', 'Anamnesa Dokter'), m('td', soapDokter.anamnesa)),
+  m('tr', m('th', 'Doctor Anamnese'), m('td', soapDokter.anamnesa)),
   _.map(soapDokter.diagnosa, (j, k) =>
-    m('tr', m('th', 'Diagnosa '+(k+1)), m('td', j.text+' / ICD X: '+(j.code || '?')))
+    m('tr', m('th', 'Diagnosys '+(k+1)), m('td', j.text+' / ICD X: '+(j.code || '?')))
   ),
   (soapDokter.tindakan || []).map(j => j && m('tr',
     m('th', _.get(lookReferences(j.idtindakan), 'nama')),
-    m('td', rupiah(_.get(lookReferences(j.idtindakan), 'harga')))
+    m('td', currency(_.get(lookReferences(j.idtindakan), 'harga')))
   )),
   // bhp sementara ini belum ditampilkan
   (soapDokter.obat || []).map(j => j && m('tr',
@@ -88,11 +88,11 @@ makeRincianSoapDokter = soapDokter => soapDokter && [
     m('td', soapDokter.planning)
   ),
   soapDokter.keluar && m('tr',
-    m('th', 'Pilihan keluar'),
+    m('th', 'Choice of exit'),
     m('td', look('keluar', soapDokter.keluar))
   ),
   soapDokter.rujuk && m('tr',
-    m('th', 'Konsul ke poli lain'),
+    m('th', 'Consult to other clinic'),
     m('td', look('klinik', soapDokter.rujuk))
   ),
   soapDokter.tracer && m('tr',
@@ -100,15 +100,15 @@ makeRincianSoapDokter = soapDokter => soapDokter && [
     m('td', soapDokter.tracer)
   ),
   (soapDokter.radio || []).map((j, k) => m('tr',
-    m('th', 'Cek radiologi '+(k+1)),
+    m('th', 'Radiology check '+(k+1)),
     m('td', {"data-tooltip": j.diagnosa}, lookReferences(j.idradio).nama),
     j.diagnosa && m('td', m('.button.is-info', {
-      "data-tooltip": 'Cetak lembar hasil diagnosa radiologi',
+      "data-tooltip": 'Print radiology diagnosys',
       onclick: () => makePdf.radio(state.onePatient.identitas, j)
     }, makeIconLabel('print', '')))
   )),
   (soapDokter.labor || []).map((j, k) => m('tr',
-    m('th', 'Cek labor '+(k+1)),
+    m('th', 'Laboratory check '+(k+1)),
     m('td', {"data-tooltip": j.diagnosa}, lookReferences(j.idlabor).nama),
     m('td', j.hasil)
   ))

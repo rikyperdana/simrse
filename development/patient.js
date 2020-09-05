@@ -13,7 +13,7 @@ _.assign(comp, {
       m('.box', m('table.table.is-striped', _.chunk([
         ['No. MR', id.no_mr],
         ['Nama Lengkap', id.nama_lengkap],
-        ['Tanggal lahir', hari(id.tanggal_lahir)],
+        ['Tanggal lahir', day(id.tanggal_lahir)],
         ['Tempat lahir', id.tempat_lahir],
         ['Jenis kelamin', look('kelamin', id.kelamin)],
         ['Agama', look('agama', id.agama)],
@@ -54,7 +54,7 @@ _.assign(comp, {
                 ...(state.onePatient.emergency || []),
               ].map(i => m('table.table',
                 i.soapPerawat && i.soapDokter && [
-                  ['Tanggal Kunjungan', hari(i.tanggal, true)],
+                  ['Tanggal Kunjungan', day(i.tanggal, true)],
                   ['Layanan', i.klinik ? look('klinik', i.klinik) : 'Emergency'],
                   ['Anamnesa Perawat', i.soapPerawat.anamnesa],
                   ['Diagnosa Dokter', i.soapDokter.diagnosa.map(i => i.text).join(', ')]

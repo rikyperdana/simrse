@@ -67,7 +67,7 @@ _.assign(comp, {
                     1000*+look('tarif_klinik', rawat.klinik)
                   ],
                   rawat.bed && [
-                    'Biaya Kamar', tarifInap(
+                    'Biaya Kamar', wardFee(
                       rawat.tanggal_masuk, rawat.keluar,
                       beds[_.get(rawat.bed, 'kelas')].tarif
                     )
@@ -128,9 +128,9 @@ _.assign(comp, {
                   [...bills, ...(rawat.charges || [])],
                   combined => [
                     combined.map(k => m('tr',
-                      m('th', k.item), m('td', rupiah(k.harga))
+                      m('th', k.item), m('td', currency(k.harga))
                     )),
-                    m('tr', m('th', 'Total'), m('td', rupiah(_.sum(
+                    m('tr', m('th', 'Total'), m('td', currency(_.sum(
                       combined.map(k => k.harga)
                     ))))
                   ]
@@ -200,7 +200,7 @@ _.assign(comp, {
             tds([
               pasien.identitas.no_mr,
               pasien.identitas.nama_lengkap,
-              hari(rawat.tanggal || rawat.tanggal_masuk),
+              day(rawat.tanggal || rawat.tanggal_masuk),
               ors([
                 rawat.klinik && look('klinik', rawat.klinik),
                 rawat.bed && 'Rawat Inap',

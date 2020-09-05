@@ -30,13 +30,13 @@ _.assign(comp, {
         }, _.get(state.login, 'username')),
         m('.navbar-dropdown.is-right',
           m('a.navbar-item',
-            makeIconLabel('user-tag', 'Peranan: '+ look('peranan', _.get(state.login, 'peranan')))
+            makeIconLabel('user-tag', 'Role: '+ look('peranan', _.get(state.login, 'peranan')))
           ),
           m('a.navbar-item',
-            makeIconLabel('shapes', 'Bidang: '+look('bidang', _.get(state.login, 'bidang')))
+            makeIconLabel('shapes', 'Dept: '+look('bidang', _.get(state.login, 'bidang')))
           ),
           m('a.navbar-item',
-            makeIconLabel('clinic-medical', 'Poliklinik: '+look('klinik', _.get(state.login, 'poliklinik')))
+            makeIconLabel('clinic-medical', 'Clinic: '+look('klinik', _.get(state.login, 'poliklinik')))
           ),
           m('hr.dropdown-divider'),
           m('a.navbar-item',
@@ -62,11 +62,11 @@ _.assign(comp, {
     m('.buttons',
       m('.button.is-info', {
         class: state.loading && 'is-loading',
-        "data-tooltip": 'otomatis setiap beberapa menit / manual',
+        "data-tooltip": 'automatically updates by few minutes / manual',
         onclick: () => [state.loading = true, getDifferences()]
       }, 'Sync'),
       state.lastSync && m('span',
-        'Terakhir sinkronisasi ' + moment(state.lastSync).fromNow()
+        'Last synchronization ' + moment(state.lastSync).fromNow()
       ),
     ),
     _.chunk(_.map(menus, (v, k) => [v, k]), 3).map(i =>
@@ -80,16 +80,16 @@ _.assign(comp, {
         ))
       )))
     ),
-    m('h1', 'Statistik Sistem'),
+    m('h1', 'System Statistic'),
     m('.tabs.is-boxed', m('ul',
       {style: 'margin-left: 0%'},
       _.map({
-        pasien: ['Pasien', 'walking'],
-        rawatJalan: ['Rawat Jalan', 'ambulance'],
+        pasien: ['Patient', 'walking'],
+        rawatJalan: ['Outpatient', 'ambulance'],
         emergency: ['Emergency', 'heart'],
-        rawatInap: ['Rawat Inap', 'bed'],
-        radiology: ['Radiologi', 'radiation'],
-        laboratory: ['Laboratorium', 'flask'],
+        rawatInap: ['Inpatient', 'bed'],
+        radiology: ['Radiology', 'radiation'],
+        laboratory: ['Laboratory', 'flask'],
         management: ['Management', 'users']
       }, (val, key) => m('li',
         {class: key === state.dashboardTab && 'is-active'},
@@ -132,22 +132,22 @@ _.assign(comp, {
       ]
     }, ({
       pasien: [
-        'Total jumlah pasien: '+_.get(state, 'stats.pasien.total'),
-        'Total pasien pria: '+_.get(state, 'stats.pasien.pria'),
-        'Total pasien wanita: '+_.get(state, 'stats.pasien.wanita')
+        'Patient in total: '+_.get(state, 'stats.pasien.total'),
+        'Total of male patient: '+_.get(state, 'stats.pasien.pria'),
+        'Total of female patient: '+_.get(state, 'stats.pasien.wanita')
       ],
       rawatJalan: selects('klinik')().map(i => [
-        'Total pasien klinik ', i.label, ': ',
+        'Total of outpatient service ', i.label, ': ',
         _.get(state, ['stats', 'rawatJalan', i.value-1])
       ].join('')),
-      emergency: ['Total pasien emergency: '+_.get(state, 'stats.emergency')],
-      rawatInap: ['Total pasien pernah inap: '+_.get(state, 'stats.rawatInap') ],
+      emergency: ['Total emergency service: '+_.get(state, 'stats.emergency')],
+      rawatInap: ['Total inpatient service: '+_.get(state, 'stats.rawatInap') ],
       radiology: ['Total layanan radiologi: '],
-      laboratory: ['Total layanan laboratorium: '],
+      laboratory: ['Total laboratory service: '],
       management: [
-        'Jumlah petugas: '+_.get(state, 'stats.management.petugas'),
-        'Jumlah perawat: '+_.get(state, 'stats.management.perawat'),
-        'Jumlah dokter: '+_.get(state, 'stats.management.dokter')
+        'Total of adm. users: '+_.get(state, 'stats.management.petugas'),
+        'Total of nurses: '+_.get(state, 'stats.management.perawat'),
+        'Total of doctors: '+_.get(state, 'stats.management.dokter')
       ]
     })[state.dashboardTab || 'pasien']
     .map(i => m('.column', m('.notification',
@@ -159,7 +159,7 @@ _.assign(comp, {
     m('.column'),
     m('.column',
       !window.chrome && m('.notification.is-warning.is-light',
-        'Mohon gunakan Chrome versi terbaru'
+        'Please use the latest version of Chrome/Chromium'
       ),
       state.error && m('.notification.is-danger.is-light', [
         m('button.delete', {onclick: () => state.error = false}),
@@ -185,7 +185,7 @@ _.assign(comp, {
             m.redraw()
           ] : [
             state.loading = false,
-            state.error = 'Password salah',
+            state.error = 'Wrong password',
             m.redraw()
           ])
         ]

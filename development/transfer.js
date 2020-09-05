@@ -78,7 +78,7 @@ _.assign(comp, {
         ]},
         !i.penyerah && tds([
           i.nama_barang, i.no_batch, lookUser(i.peminta),
-          look('bidang', i.ruangan), i.diminta, hari(i.tanggal_minta, true)
+          look('bidang', i.ruangan), i.diminta, day(i.tanggal_minta, true)
         ])
       ))),
       makeModal('modalResponAmprah')
@@ -96,8 +96,8 @@ _.assign(comp, {
         .map(i => m('tr',
           i.penyerah && tds([
             i.nama_barang, i.no_batch,
-            lookUser(i.peminta), i.diminta, hari(i.tanggal_minta, true),
-            lookUser(i.penyerah), i.diserah, hari(i.tanggal_serah, true)
+            lookUser(i.peminta), i.diminta, day(i.tanggal_minta, true),
+            lookUser(i.penyerah), i.diserah, day(i.tanggal_serah, true)
           ])
         ))
       )

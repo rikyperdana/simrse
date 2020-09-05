@@ -2,12 +2,12 @@
 
 _.assign(comp, {
   users: () => state.login.bidang !== 5 ?
-  m('p', 'Hanya untuk user manajemen') : m('.content',
-    m('h3', 'Manajemen Akun'),
+  m('p', 'Only for management user') : m('.content',
+    m('h3', 'Accounts Management'),
     m('.button.is-primary',
       {onclick: () =>
         state.modalAccount = m('.box',
-          m('h3', 'Tambah Akun'),
+          m('h3', 'Add Account'),
           m(autoForm({
             id: 'createAccount', schema: schemas.account,
             action: doc =>
@@ -18,7 +18,7 @@ _.assign(comp, {
           }))
         )
       },
-      makeIconLabel('user-plus', 'Tambah akun')
+      makeIconLabel('user-plus', 'Add Account')
     ), m('br'), m('br'),
     makeModal('modalAccount'),
     m('.box', m('table.table.is-striped',
@@ -26,7 +26,8 @@ _.assign(comp, {
         state.userList = array, m.redraw()
       ])},
       m('thead', m('tr',
-        ['Nama lengkap', 'Username', 'Peranan', 'Bidang', 'Poliklinik', 'Keaktifan']
+        ['Nama lengkap', 'Username', 'Peranan', 'Bidang', 'Poliklinik']
+        ['Full Name', 'Username', 'Role', 'Department', 'Clinic']
         .map(i => m('th', i)))
       ),
       m('tbody', (state.userList.filter(i =>
@@ -35,7 +36,7 @@ _.assign(comp, {
         m('tr',
           {ondblclick: () =>
             state.modalAccount = m('.box',
-              m('h4', 'Profil Pengguna'),
+              m('h4', 'User Profile'),
               m(autoForm({
                 id: 'updateAccount', schema: schemas.account, doc: i,
                 action: doc =>
@@ -51,7 +52,6 @@ _.assign(comp, {
             look('peranan', i.peranan),
             look('bidang', i.bidang),
             look('klinik', i.poliklinik),
-            look('keaktifan', i.keaktifan)
           ])
         )
       ))
@@ -60,8 +60,8 @@ _.assign(comp, {
 
   // referensi harus terbuka untuk seluruh pihak
   references: () => m('.content',
-    m('h3', 'Daftar Tarif'),
-    m('p.help', '* Tersusun alfabetis'),
+    m('h3', 'Fee List'),
+    m('p.help', '* Sorted Alphabetically'),
     m('.box', m('table.table.is-striped',
       {oncreate: () => db.references.toArray(array => [
         state.referenceList = _.sortBy(array, ['nama']),
@@ -69,12 +69,13 @@ _.assign(comp, {
       ])},
       m('thead', m('tr',
         ['Nama item', 'Harga', 'Grup 1', 'Grup 2', 'Grup 3']
+        ['Item Name', 'Price', 'Group 1', 'Group 2', 'Group 3']
         .map(i => m('th', i))
       )),
       m('tbody',
         paginate(state.referenceList || [], 'references', 20)
         .map(i => i.nama && m('tr', tds([
-          i.nama, rupiah(i.harga), i[0], i[1], i[2]
+          i.nama, currency(i.harga), i[0], i[1], i[2]
         ])))
       )
     )),
@@ -86,7 +87,7 @@ _.assign(comp, {
       state.login.bidang === 5,
       state.login.peranan === 4
     ]) && [
-      m('h3', 'Import Data'),
+      m('h3', 'Data Import'),
       m('.file.is-danger',
         {onchange: e => Papa.parse(e.target.files[0], {
           header: true, complete: result => withThis(
@@ -95,7 +96,7 @@ _.assign(comp, {
                 method: 'insertMany', collection: collName, documents: docs
               }, () => ''),
               db[collName].bulkPut(docs).then(last =>
-                last && alert('Berhasil import, silahkan refresh')
+                last && alert('Successfully imported, please refresh')
               )
             ],
             updater => ors([
@@ -159,13 +160,13 @@ _.assign(comp, {
         })},
         m('label.file-label',
           m('input.file-input', {type: 'file', name: 'import'}),
-          m('span.file-cta', m('span.file-label', 'Pilih file'))
+          m('span.file-cta', m('span.file-label', 'Select File'))
         )
       ),
       m('a.help', {
         href: 'https://github.com/rikyperdana/simrs/wiki/Import-Master-Data',
         target: '_blank'
-      }, 'Panduan Import Data Master')
+      }, 'Guide for file importing')
     ]
   ),
 

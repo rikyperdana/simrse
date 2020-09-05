@@ -19,7 +19,7 @@ _.assign(comp, {
           )
         ))
       ]},
-      m('th', m('h1', 'Antrian Pendaftaran')),
+      m('th', m('h1', 'Registration Queue')),
       m('th', m('h1', 'R'+(localStorage.regQueue || 0)))
     )),
     m('.buttons',
@@ -32,16 +32,16 @@ _.assign(comp, {
           makePdf.regQueue(+localStorage.regQueue),
           localStorage.setItem('regQueue', +localStorage.regQueue+1)
         ])
-      }, 'Cetak antrian'),
+      }, 'Print Queue'),
       m('.button', {
         onclick: () => localStorage.setItem('regQueue', 0)
-      }, 'Reset Antrian')
+      }, 'Reset Queue')
     ),
     Array(3).map(i => m('br')),
     // TODO: antrian poliklinik belum ada angkanya
     m('table.is-fullwidth.is-striped',
       m('thead', m('tr'), [
-        'Antrian Poliklinik', 'Urutan', 'Panjang'
+        'Clinic Queue', 'Number', 'Length'
       ].map(i => m('td', m('h1', i)))),
       selects('klinik')().map(i => m('tr',
         [

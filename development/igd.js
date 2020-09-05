@@ -34,7 +34,7 @@ _.assign(comp, {
           ]},
           m('td', i.identitas.no_mr),
           m('td', i.identitas.nama_lengkap),
-          m('td', hari(_.get(_.last(i.emergency), 'tanggal'), true))
+          m('td', day(_.get(_.last(i.emergency), 'tanggal'), true))
         ))
       )
     ))
@@ -53,7 +53,7 @@ _.assign(comp, {
             state.modalVisit = m('.box',
               m('h4', 'Rincian kunjungan IGD'),
               m('table.table',
-                m('tr', m('th', 'Tanggal berobat'), m('td', hari(i.tanggal))),
+                m('tr', m('th', 'Tanggal berobat'), m('td', day(i.tanggal))),
                 m('tr', m('th', 'Cara bayar'), m('td', look('cara_bayar', i.cara_bayar))),
                 m('tr', m('th', 'Perawat'), m('td', lookUser(_.get(i, 'soapPerawat.perawat')))),
                 m('tr', m('th', 'Dokter'), m('td', lookUser(_.get(i, 'soapDokter.dokter')))),
@@ -86,7 +86,7 @@ _.assign(comp, {
             )
           },
           tds([
-            hari(i.tanggal),
+            day(i.tanggal),
             look('cara_bayar', i.cara_bayar),
             lookUser(_.get(i, 'soapPerawat.perawat')),
             lookUser(_.get(i, 'soapDokter.dokter'))

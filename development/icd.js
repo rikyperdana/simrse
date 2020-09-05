@@ -2,11 +2,11 @@
 
 _.assign(comp, {
   icd: () => state.login.bidang !== 1 ?
-  m('p', 'Hanya untuk bidang Pendaftaran/ICD') : m('.content',
-    m('h3', 'Kodifikasi Diagnosa ICD 10 & ICD 9-CM'),
+  m('p', 'Only for codification users') : m('.content',
+    m('h3', 'Diagnosys codification for ICD 10 & ICD 9-CM'),
     m('.box', m('table.table.is-striped',
       m('thead', m('tr',
-        ['Nama pasien', 'Tanggal kunjungan', 'Layanan', 'Perawat', 'Dokter', 'ICD10', 'ICD9CM']
+        ['Patient name', 'Date of visit', 'Service', 'Nurse', 'Doctor', 'ICD10', 'ICD9CM']
         .map(i => m('th', i))
       )),
       m('tbody',
@@ -37,7 +37,7 @@ _.assign(comp, {
         .sort((a, b) => a.rawat.tanggal - b.rawat.tanggal)
         .map(({pasien, rawat}) => m('tr',
           m('td', pasien.identitas.nama_lengkap),
-          m('td', hari(rawat.tanggal)),
+          m('td', day(rawat.tanggal)),
           m('td', ors([
             rawat.klinik && look('klinik', rawat.klinik),
             rawat.idrawat && 'IGD', 'Rawat Inap'
