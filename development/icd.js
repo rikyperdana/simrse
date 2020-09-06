@@ -36,7 +36,7 @@ _.assign(comp, {
         (state.codifications || [])
         .sort((a, b) => a.rawat.tanggal - b.rawat.tanggal)
         .map(({pasien, rawat}) => m('tr',
-          m('td', pasien.identitas.nama_lengkap),
+          m('td', pasien.identity.nama_lengkap),
           m('td', day(rawat.tanggal)),
           m('td', ors([
             rawat.klinik && look('klinik', rawat.klinik),
@@ -58,7 +58,7 @@ _.assign(comp, {
                       rawat.idrawat ? updateBoth(
                         'patients', pasien._id,
                         _.assign({
-                          _id: pasien._id, identitas: pasien.identitas,
+                          _id: pasien._id, identity: pasien.identity,
                           rawatJalan: pasien.rawatJalan || [],
                           emergency: pasien.emergency || [],
                           rawatInap: pasien.rawatInap || []
@@ -77,7 +77,7 @@ _.assign(comp, {
                         ]
                       ) : updateBoth(
                         'patients', pasien._id, {
-                          _id: pasien._id, identitas: pasien.identitas,
+                          _id: pasien._id, identity: pasien.identity,
                           rawatJalan: pasien.rawatJalan || [],
                           emergency: pasien.emergency || [],
                           rawatInap : pasien.rawatInap.map(b =>
@@ -129,7 +129,7 @@ _.assign(comp, {
                       rawat.idrawat ? updateBoth(
                         'patients', pasien._id,
                         _.assign({
-                          _id: pasien._id, identitas: pasien.identitas,
+                          _id: pasien._id, identity: pasien.identity,
                           rawatJalan: pasien.rawatJalan || [],
                           emergency: pasien.emergency || [],
                           rawatInap: pasien.rawatInap || []
@@ -148,7 +148,7 @@ _.assign(comp, {
                         ]
                       ) : updateBoth(
                         'patients', pasien._id, {
-                          _id: pasien._id, identitas: pasien.identitas,
+                          _id: pasien._id, identity: pasien.identity,
                           rawatJalan: pasien.rawatJalan || [],
                           emergency: pasien.emergency || [],
                           rawatInap : pasien.rawatInap.map(b =>

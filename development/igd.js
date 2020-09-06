@@ -33,8 +33,8 @@ _.assign(comp, {
             }),
             m.redraw()
           ]},
-          m('td', i.identitas.no_mr),
-          m('td', i.identitas.nama_lengkap),
+          m('td', i.identity.mr_num),
+          m('td', i.identity.nama_lengkap),
           m('td', day(_.get(_.last(i.emergency), 'tanggal'), true))
         ))
       )
@@ -80,7 +80,7 @@ _.assign(comp, {
                   )
                 ]),
                 m('.button.is-info',
-                  {onclick: () => makePdf.soap(state.onePatient.identitas, i)},
+                  {onclick: () => makePdf.soap(state.onePatient.identity, i)},
                   makeIconLabel('print', 'Print SOAP')
                 )
               )

@@ -123,7 +123,7 @@ _.assign(comp, {
               ].filter(k => k.length).map(k => ({item: k[0], harga: k[1]})),
               bills => state.modalCashier = m('.box',
                 m('h3', 'Payment Confirmation'),
-                m('p', m('b', [pasien.identitas.nama_lengkap, pasien.identitas.no_mr].join(' / '))),
+                m('p', m('b', [pasien.identity.nama_lengkap, pasien.identity.mr_num].join(' / '))),
                 m('table.table', withThis(
                   [...bills, ...(rawat.charges || [])],
                   combined => [
@@ -198,8 +198,8 @@ _.assign(comp, {
               )
             )},
             tds([
-              pasien.identitas.no_mr,
-              pasien.identitas.nama_lengkap,
+              pasien.identity.mr_num,
+              pasien.identity.nama_lengkap,
               day(rawat.tanggal || rawat.tanggal_masuk),
               ors([
                 rawat.klinik && look('klinik', rawat.klinik),

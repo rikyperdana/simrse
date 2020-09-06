@@ -40,7 +40,7 @@ _.assign(comp, {
             m('h4', 'Inapkan pasien'),
             m('table.table',
               [
-                ['Full Name', i.pasien.identitas.no_mr],
+                ['Full Name', i.pasien.identity.mr_num],
                 ['Payment method', look('cara_bayar', i.inap.cara_bayar)],
                 ['Nurse Anamnese', _.get(i, 'inap.soapPerawat.anamnesa')],
                 ['Doctor Anamnese', _.get(i, 'inap.soapDokter.anamnesa')],
@@ -67,8 +67,8 @@ _.assign(comp, {
           ), m.redraw()
         ]},
         tds([
-          i.pasien.identitas.no_mr,
-          i.pasien.identitas.nama_lengkap,
+          i.pasien.identity.mr_num,
+          i.pasien.identity.nama_lengkap,
           day(i.inap.tanggal, true),
           _.get(i.inap, 'klinik') ? 'Outpatient' : 'Emergency',
           lookUser(_.get(i.inap, 'soapDokter.dokter'))
@@ -108,8 +108,8 @@ _.assign(comp, {
               onePatientTab: 'inpatient'
             })},
             tds([
-              i.identitas.no_mr,
-              i.identitas.nama_lengkap,
+              i.identity.mr_num,
+              i.identity.nama_lengkap,
               [
                 _.upperCase(bed.kelas),
                 _.startCase(bed.kamar),
@@ -155,7 +155,7 @@ _.assign(comp, {
                       ),
                       m('.button.is-info',
                         {onclick: () => makePdf.soap(
-                          state.onePatient.identitas,
+                          state.onePatient.identity,
                           j.perawat ? {soapPerawat: j} : {soapDokter: j}
                         )},
                         makeIconLabel('print', 'Print SOAP')
@@ -238,7 +238,7 @@ _.assign(comp, {
                   o.bed.nomor === m+1
                 ])
               )
-            ), 'identitas.nama_lengkap')
+            ), 'identity.nama_lengkap')
           ])
         )), 2
       ).map(p => m('tr', p.map(

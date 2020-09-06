@@ -34,9 +34,9 @@ _.assign(comp, {
           })},
           tds([
             day(_.get(_.last(i.rawatJalan), 'tanggal'), true),
-            i.identitas.no_mr, i.identitas.nama_lengkap,
-            day(i.identitas.tanggal_lahir),
-            i.identitas.tempat_lahir
+            i.identity.mr_num, i.identity.nama_lengkap,
+            day(i.identity.tanggal_lahir),
+            i.identity.tempat_lahir
           ])
         ))
       )
@@ -86,12 +86,12 @@ _.assign(comp, {
                   )
                 ]),
                 m('.button.is-info',
-                  {onclick: () => makePdf.soap(state.onePatient.identitas, i)},
+                  {onclick: () => makePdf.soap(state.onePatient.identity, i)},
                   makeIconLabel('print', 'Print SOAP')
                 ),
                 _.get(i.soapDokter, 'labor') && m('.button.is-info',
                   {onclick: () => makePdf.labor(
-                    state.onePatient.identitas, i.soapDokter.labor
+                    state.onePatient.identity, i.soapDokter.labor
                   )}, makeIconLabel('print', 'Print Labor')
                 )
               )

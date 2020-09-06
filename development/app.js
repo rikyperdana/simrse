@@ -105,10 +105,10 @@ _.assign(comp, {
           pasien: {
             total: array.length,
             pria: array.filter(
-              i => i.identitas.kelamin === 1
+              i => i.identity.kelamin === 1
             ).length,
             wanita: array.filter(
-              i => i.identitas.kelamin === 2
+              i => i.identity.kelamin === 2
             ).length
           },
           rawatJalan: selects('klinik')().map(

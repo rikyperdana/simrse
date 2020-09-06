@@ -23,7 +23,7 @@ _.assign(comp, {
       },
       m('tr', ['Patient Name', 'Surgery Schedul', 'Action Name'].map(i => m('th', i))),
       state.surgeryList && _.flatten(state.surgeryList).map(i => m('tr', tds([
-        i.identitas.nama_lengkap,
+        i.identity.nama_lengkap,
         day(i.jadwal, true),
         lookReferences(i.idtindakan).nama
       ])))

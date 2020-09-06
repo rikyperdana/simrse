@@ -2,7 +2,7 @@
 
 _.assign(comp, {
   onePatient: () => withThis(
-    state.onePatient.identitas,
+    state.onePatient.identity,
     id => m('.content',
       {onupdate: () => [
         db.references.toArray(array => state.references = array),
@@ -11,7 +11,7 @@ _.assign(comp, {
       ]},
       m('h3', 'Patient Medical Record'),
       m('.box', m('table.table.is-striped', _.chunk([
-        ['MR Num.', id.no_mr],
+        ['MR Num.', id.mr_num],
         ['Full Name', id.nama_lengkap],
         ['Date of Birth', day(id.tanggal_lahir)],
         ['Place of Birth', id.tempat_lahir],

@@ -25,7 +25,7 @@ _.assign(comp, {
             m('table.table',
               m('tr',
                 m('th', 'Patient Name'),
-                m('td', i.identitas.nama_lengkap)
+                m('td', i.identity.nama_lengkap)
               ),
               withThis(_.last(i.rawatInap), inap => [
                 m('tr',
@@ -45,7 +45,7 @@ _.assign(comp, {
             )
           )
         ]}, tds([
-          i.identitas.nama_lengkap,
+          i.identity.nama_lengkap,
           day(_.get(_.last(i.rawatInap), 'tanggal_masuk'), true)
         ]))
       ))

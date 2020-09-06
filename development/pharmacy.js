@@ -141,7 +141,7 @@ _.assign(comp, {
                 m('p.buttons',
                   m('.button.is-info',
                     {onclick: () => makePdf.resep(
-                      serahList, updatedPatient.identitas.no_mr
+                      serahList, updatedPatient.identity.mr_num
                     )},
                     makeIconLabel('print', 'Cetak salinan resep')
                   ),
@@ -184,7 +184,7 @@ _.assign(comp, {
               )
           ))},
           [
-            i.pasien.identitas.no_mr, i.pasien.identitas.nama_lengkap,
+            i.pasien.identity.mr_num, i.pasien.identity.nama_lengkap,
             day(i.rawat.tanggal, true), look('cara_bayar', i.rawat.cara_bayar),
             ors([
               i.rawat.klinik && look('klinik', i.rawat.klinik),

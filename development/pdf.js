@@ -2,30 +2,30 @@
 
 var kop = {text: 'RUMAH SAKIT MEDICARE\nJL. Dt. Laksamana No. 1, Pangkalan Kuras, Pelalawan, Provinsi Riau.\n\n', alignment: 'center', bold: true},
 makePdf = {
-  card: identitas =>
+  card: identity =>
     pdfMake.createPdf(defaultStyle({
       content: [
-        'Nama: '+identitas.nama_lengkap,
-        'No. MR: '+identitas.no_mr
+        'Nama: '+identity.nama_lengkap,
+        'No. MR: '+identity.mr_num
       ],
       pageSize: 'B8',
       pageMargins: [110, 50, 0, 0],
       pageOrientation: 'landscape'
-    })).download('kartu_peserta_'+identitas.no_mr),
+    })).download('kartu_peserta_'+identity.mr_num),
 
-  consent: identitas =>
+  consent: identity =>
     pdfMake.createPdf(defaultStyle({content: [
       kop,
       {text: 'Data Umum Pasien\n', alignment: 'center'},
       {columns: [
         ['No. MR', 'Nama Lengkap', 'Tempat & Tanggal Lahir', 'Nama Ibu', 'Alamat', 'Kontak'],
         [
-          identitas.no_mr,
-          identitas.nama_lengkap,
-          (identitas.tempat_lahir || '')+', '+day(identitas.tanggal_lahir),
-          _.get(identitas.keluarga, 'ibu') || '',
-          identitas.tempat_tinggal || '',
-          identitas.kontak || ''
+          identity.mr_num,
+          identity.nama_lengkap,
+          (identity.tempat_lahir || '')+', '+day(identity.tanggal_lahir),
+          _.get(identity.keluarga, 'ibu') || '',
+          identity.tempat_tinggal || '',
+          identity.kontak || ''
         ].map(i => ': '+i)
       ]},
       {text: '\nPersetujuan Umum General Consent\n', alignment: 'center'},
@@ -34,7 +34,7 @@ makePdf = {
         ['', '', 'Saya akan mentaati peraturan yang berlaku di RS Medicare.'],
         ['', '', 'Saya memberi kuasa kepada dokter dan semua tenaga kesehatan untuk melakukan pemeriksaan / pengobatan / tindakan yang diperlukan dalam upaya kesembuhan saya / pasien tersebut diatas.'],
         ['', '', 'Saya memberi kuasa kepada dokter dan semua tenaga kesehatan yang ikut merawat saya untuk memberikan keterangan medis saya kepada yang bertanggungjawab atas biaya perawatan saya.'],
-        ['', '', 'Saya memberi kuasa kepada RS Medicare untuk menginformasikan identitas sosial saya kepada keluarga / rekan / masyarakat.'],
+        ['', '', 'Saya memberi kuasa kepada RS Medicare untuk menginformasikan identity sosial saya kepada keluarga / rekan / masyarakat.'],
         ['', '', 'Saya mengatakan bahwa informasi hasil pemeriksaan / rekam medis saya dapat digunakan untuk pendidikan / penelitian demi kemajuan ilmu kesehatan.']
       ]}},
       '\nPetunjuk :\nS: Setuju\nTS: Tidak Setuju',
@@ -42,22 +42,22 @@ makePdf = {
         {text: '\n\n\n\n__________________\n'+state.login.nama, alignment: 'center'},
         {text: 'Pangkalan Kuras, '+day(_.now())+'\n\n\n\n__________________\nPasien', alignment: 'center'}
       ]}
-    ]})).download('general_consent_'+identitas.no_mr),
+    ]})).download('general_consent_'+identity.mr_num),
 
   bayar_pendaftaran: (pasien, rawat, rawatLength) =>
     pdfMake.createPdf(defaultStyle({content: [kop, {columns: [
       ['Tanggal', 'No. MR', 'Nama Pasien', 'Tarif', 'Petugas'],
       [
         day(_.now()),
-        pasien.identitas.no_mr,
-        pasien.identitas.nama_lengkap,
+        pasien.identity.mr_num,
+        pasien.identity.nama_lengkap,
         'Total: '+currency(_.sum([
           rawatLength > 1 ? 0 : tarifKartu,
           1000 * +look('tarif_klinik', rawat.klinik)
         ])),
         state.login.nama
       ].map(i => ': '+i)
-    ]}]})).download('bayar_pendaftaran_'+pasien.identitas.no_mr),
+    ]}]})).download('bayar_pendaftaran_'+pasien.identity.mr_num),
 
   bayar_konsultasi: (pasien, rawat, bills) =>
     pdfMake.createPdf(defaultStyle({content: [
@@ -65,11 +65,11 @@ makePdf = {
       {columns: [
         ['No. MR', 'Nama Pasien', 'Jenis Kelamin', 'Tanggal Lahir', 'Umur', 'Layanan'],
         [
-          pasien.identitas.no_mr,
-          _.startCase(pasien.identitas.nama_lengkap),
-          look('kelamin', pasien.identitas.kelamin) || '-',
-          day(pasien.identitas.tanggal_lahir),
-          moment().diff(pasien.identitas.tanggal_lahir, 'years')+' tahun',
+          pasien.identity.mr_num,
+          _.startCase(pasien.identity.nama_lengkap),
+          look('kelamin', pasien.identity.kelamin) || '-',
+          day(pasien.identity.tanggal_lahir),
+          moment().diff(pasien.identity.tanggal_lahir, 'years')+' tahun',
           ors([
             rawat.observasi && 'Rawat Inap',
             rawat.klinik && look('klinik', rawat.klinik).label,
@@ -84,24 +84,24 @@ makePdf = {
       )}},
       '\nTotal Biaya '+currency(_.sum(bills.map(i => i.harga))),
       {text: '\nP. Kuras, '+day(_.now())+'\n\n\n\n\nPetugas', alignment: 'right'}
-    ]})).download('bayar_konsultasi_'+pasien.identitas.no_mr),
+    ]})).download('bayar_konsultasi_'+pasien.identity.mr_num),
 
-  soap: (identitas, rawat) =>
+  soap: (identity, rawat) =>
     pdfMake.createPdf(defaultStyle({content: [
       kop,
       {table: {widths: ['auto', '*', 'auto'], body: [
         [
-          'Nama: '+identitas.nama_lengkap,
-          'Tanggal lahir: '+day(identitas.tanggal_lahir),
-          'No. MR: '+identitas.no_mr
+          'Nama: '+identity.nama_lengkap,
+          'Tanggal lahir: '+day(identity.tanggal_lahir),
+          'No. MR: '+identity.mr_num
         ],
         [
-          'Kelamin: '+look('kelamin', identitas.kelamin),
+          'Kelamin: '+look('kelamin', identity.kelamin),
           'Tanggal kunjungan: '+day(ors([
             rawat.tanggal, rawat.tanggal_masuk,
             _.get(rawat, 'soapDokter.tanggal')
           ])),
-          'Gol. Darah: '+look('darah', identitas.darah)],
+          'Gol. Darah: '+look('darah', identity.darah)],
         [
           'Klinik: '+look('klinik', rawat.klinik),
           'Tanggal cetak: '+day(_.now()),
@@ -188,9 +188,9 @@ makePdf = {
           ]}}
         ]
       ].filter(Boolean) : ''
-    ]})).download('soap_'+identitas.no_mr),
+    ]})).download('soap_'+identity.mr_num),
 
-  resep: (drugs, no_mr) =>
+  resep: (drugs, mr_num) =>
     pdfMake.createPdf(defaultStyle({content: [
       kop,
       {text: 'Salinan Resep\n\n', alignment: 'center', bold: true},
@@ -217,7 +217,7 @@ makePdf = {
         ['Nama Barang', 'No. Batch', 'Jumlah'],
         ...drugs.map(i => [i.nama_barang, i.no_batch, i.serahkan])
       ]}}
-    ]})).download('salinan_resep_'+no_mr),
+    ]})).download('salinan_resep_'+mr_num),
 
   report: (title, rows, info) =>
     pdfMake.createPdf(defaultStyle({
@@ -240,15 +240,15 @@ makePdf = {
       pageSize: 'B8'
     })).download('antrian_pendaftaran_'+(last+1)),
 
-  radio: (identitas, radiologi) =>
+  radio: (identity, radiologi) =>
     pdfMake.createPdf(defaultStyle({content: [
       kop, {
         text: 'Hasil Diagnosa Radiologist',
         fontSize: 15, bold: true, alignment: 'center'
       }, '\n\n',
       {table: {widths: ['auto', '*'], body: [
-        ['Nama Pasien', ': '+identitas.nama_lengkap],
-        ['No. MR', ': '+identitas.no_mr],
+        ['Nama Pasien', ': '+identity.nama_lengkap],
+        ['No. MR', ': '+identity.mr_num],
         ['Petugas', ': '+lookUser(radiologi.petugas)],
         ['Kode berkas', ': '+radiologi.kode_berkas]
       ]}, layout: 'noBorders'}, '\n\n',
@@ -257,9 +257,9 @@ makePdf = {
         {text: '\n\n\n\n__________________\nPasien', alignment: 'center'},
         {text: 'Pangkalan Kuras, '+day(_.now())+'\n\n\n\n__________________\n'+lookUser(radiologi.petugas), alignment: 'center'}
       ]}
-    ]})).download('hasil_radiologi_'+identitas.no_mr+'_'+radiologi.kode_berkas),
+    ]})).download('hasil_radiologi_'+identity.mr_num+'_'+radiologi.kode_berkas),
 
-  labor: (identitas, labors) =>
+  labor: (identity, labors) =>
     pdfMake.createPdf(defaultStyle({content: [
       kop,
       {
@@ -277,5 +277,5 @@ makePdf = {
         {text: '\n\n\n\n__________________\nPasien', alignment: 'center'},
         {text: 'Pangkalan Kuras, '+day(_.now())+'\n\n\n\n__________________\nPetugas', alignment: 'center'}
       ]}
-    ]})).download('hasil_labor_'+identitas.no_mr)
+    ]})).download('hasil_labor_'+identity.mr_num)
 }

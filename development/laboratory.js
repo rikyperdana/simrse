@@ -57,8 +57,8 @@ _.assign(comp, {
               _.get(i, 'rawat.tanggal'),
               _.get(i, 'observasi.tanggal')
             ]), true),
-            i.pasien.identitas.no_mr,
-            i.pasien.identitas.nama_lengkap,
+            i.pasien.identity.mr_num,
+            i.pasien.identity.nama_lengkap,
             ors([
               _.get(i, 'rawat.klinik') && look('klinik', i.rawat.klinik),
               i.observasi && 'Inpatient',
@@ -142,7 +142,7 @@ _.assign(comp, {
           })
         ),
         doc.labor.filter(i => i.hasil).length &&
-        makePdf.labor(state.responLaboratory.pasien.identitas, doc.labor),
+        makePdf.labor(state.responLaboratory.pasien.identity, doc.labor),
         _.assign(state, {route: 'laboratory', laboratoryList: []}),
         m.redraw()
       ]

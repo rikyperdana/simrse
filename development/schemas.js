@@ -1,15 +1,15 @@
 /*global ors _ state selects randomId beds ands withThis lookReferences*/
 
 var schemas = {
-  identitas: {
-    no_antrian: {type: String, optional: true, exclude: true},
-    no_mr: {
+  identity: {
+    queue_num: {type: String, optional: true, exclude: true},
+    mr_num: {
       type: Number, label: 'MR Num.',
       autoform: {help: 'randomized and may be changed'},
       autoValue: (name, doc, opts) =>
         // jika update, gunakan No. MR yg sudah ada
         opts.id === 'updatePatient' ?
-        _.get(state, 'onePatient.identitas.no_mr')
+        _.get(state, 'onePatient.identitas.mr_num')
         // No. MR otomatis 6 angka, silahkan naikkan jika perlu
         : Math.floor(Math.random() * 1e6)
     },

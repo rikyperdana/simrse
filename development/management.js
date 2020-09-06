@@ -108,7 +108,7 @@ _.assign(comp, {
               result.data[0].nama_lengkap && updater(
                 'patients', result.data.map(i => _.merge(
                   {updated: _.now(), _id: randomId()},
-                  {identitas: _.merge(
+                  {identity: _.merge(
                     {
                       keluarga: {ayah: i.ayah || '', ibu: i.ibu || '', pasangan: i.pasangan || ''},
                       kontak: i.kontak || '', nama_lengkap: _.startCase(i.nama_lengkap),
@@ -119,7 +119,7 @@ _.assign(comp, {
                     },
                     _.fromPairs(
                       ['agama', 'alias', 'darah', 'kelamin', 'ktp',
-                       'nikah', 'no_mr', 'pekerjaan', 'pendidikan']
+                       'nikah', 'mr_num', 'pekerjaan', 'pendidikan']
                       .map(j => +i[j] ? [j, +i[j]] : ['', ''])
                     )
                   )}

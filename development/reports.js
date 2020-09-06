@@ -37,8 +37,8 @@ var reports = {
             .sort((a, b) => a.rawat.tanggal - b.rawat.tanggal)
             .map(i => [
               day(i.rawat.tanggal || i.rawat.tanggal_masuk),
-              String(i.pasien.identitas.no_mr),
-              i.pasien.identitas.nama_lengkap,
+              String(i.pasien.identity.mr_num),
+              i.pasien.identity.nama_lengkap,
               ors([ // pilihan layanan
                 i.rawat.klinik && look('klinik', i.rawat.klinik),
                 i.rawat.bed && 'Rawat Inap', 'IGD'
@@ -121,8 +121,8 @@ var reports = {
             _.get(rawat, 'soapDokter.obat') &&
             rawat.soapDokter.obat.map(i => i.harga && [
               day(rawat.tanggal),
-              pasien.identitas.no_mr,
-              pasien.identitas.nama_lengkap,
+              pasien.identity.mr_num,
+              pasien.identity.nama_lengkap,
               ors([
                 rawat.klinik && look('klinik', rawat.klinik),
                 rawat.idinap && 'Rawat Inap',
@@ -159,8 +159,8 @@ var reports = {
                 rawat.tanggal > date.start && rawat.tanggal < date.end
               ]) && [
                 day(rawat.tanggal),
-                pasien.identitas.no_mr.toString(),
-                pasien.identitas.nama_lengkap,
+                pasien.identity.mr_num.toString(),
+                pasien.identity.nama_lengkap,
                 lookUser(_.get(rawat, 'soapPerawat.perawat')),
                 lookUser(_.get(rawat, 'soapDokter.dokter'))
               ]
@@ -192,8 +192,8 @@ var reports = {
                 rawat.tanggal_masuk < date.end
               ]) && [
                 day(rawat.tanggal_masuk),
-                pasien.identitas.no_mr.toString(),
-                pasien.identitas.nama_lengkap,
+                pasien.identity.mr_num.toString(),
+                pasien.identity.nama_lengkap,
                 rawat.observasi.map(i =>
                   lookUser(i.perawat)
                 ).join(', '),
@@ -232,8 +232,8 @@ var reports = {
           .map(({pasien, rawat}) => [
             day(rawat.tanggal),
             look('klinik', rawat.klinik),
-            pasien.identitas.no_mr.toString(),
-            pasien.identitas.nama_lengkap,
+            pasien.identity.mr_num.toString(),
+            pasien.identity.nama_lengkap,
             lookUser(_.get(rawat, 'soapPerawat.perawat')),
             lookUser(_.get(rawat, 'soapDokter.dokter'))
           ])

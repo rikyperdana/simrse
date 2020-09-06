@@ -104,7 +104,7 @@ makeRincianSoapDokter = soapDokter => soapDokter && [
     m('td', {"data-tooltip": j.diagnosa}, lookReferences(j.idradio).nama),
     j.diagnosa && m('td', m('.button.is-info', {
       "data-tooltip": 'Print radiology diagnosys',
-      onclick: () => makePdf.radio(state.onePatient.identitas, j)
+      onclick: () => makePdf.radio(state.onePatient.identity, j)
     }, makeIconLabel('print', '')))
   )),
   (soapDokter.labor || []).map((j, k) => m('tr',

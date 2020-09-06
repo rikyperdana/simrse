@@ -13,7 +13,7 @@ _.assign(comp, {
         ]) && [
           state.loading = true, m.redraw(),
           db.patients.filter(i => _.includes(
-            _.lowerCase(i.identitas.nama_lengkap)+i.identitas.no_mr,
+            _.lowerCase(i.identity.nama_lengkap)+i.identity.mr_num,
             e.target.value
           )).toArray(array => [
             _.assign(state, {
@@ -33,15 +33,15 @@ _.assign(comp, {
       )),
       m('tbody',
         (state.searchPatients || [])
-        .sort((a, b) => a.identitas.tanggal_lahir - b.identitas.tanggal_lahir)
+        .sort((a, b) => a.identity.tanggal_lahir - b.identity.tanggal_lahir)
         .map(i => m('tr',
           {ondblclick: () => _.assign(state, {
             route: 'onePatient', onePatient: i
           })},
           tds([
             day(_.get(_.last([...(i.rawatJalan || []), ...(i.emergency || [])]), 'tanggal')),
-            i.identitas.no_mr, i.identitas.nama_lengkap,
-            day(i.identitas.tanggal_lahir), i.identitas.tempat_lahir
+            i.identity.mr_num, i.identity.nama_lengkap,
+            day(i.identity.tanggal_lahir), i.identity.tempat_lahir
           ])
         ))
       )
@@ -58,13 +58,13 @@ _.assign(comp, {
   newPatient: () => m('.content',
     m('h3', 'New Patient Registration'),
     m(autoForm({
-      id: 'newPatient', schema: schemas.identitas,
+      id: 'newPatient', schema: schemas.identity,
       confirmMessage: 'Are you sure to register NEW patient?',
       action: doc => withThis(
-        {identitas: doc, _id: randomId()}, obj => [
+        {identity: doc, _id: randomId()}, obj => [
           insertBoth('patients', obj),
-          doc.no_antrian && db.queue.toArray(arr => withThis(
-            arr.find(i => i.no_antrian === doc.no_antrian),
+          doc.queue_num && db.queue.toArray(arr => withThis(
+            arr.find(i => i.queue_num === doc.queue_num),
             obj => updateBoth('queue', obj._id, _.merge(obj, {done: true}))
           )),
           _.assign(state, {route: 'onePatient', onePatient: obj})
@@ -76,12 +76,12 @@ _.assign(comp, {
   updatePatient: () => m('.content',
     m('h3', 'Update Patient Identity'),
     m(autoForm({
-      id: 'updatePatient', schema: schemas.identitas,
-      doc: state.onePatient.identitas,
+      id: 'updatePatient', schema: schemas.identity,
+      doc: state.onePatient.identity,
       action: doc => [
         updateBoth(
           'patients', state.onePatient._id,
-          _.assign(state.onePatient, {identitas: doc})
+          _.assign(state.onePatient, {identity: doc})
         ), state.route = 'onePatient', m.redraw()
       ]
     }))
@@ -105,8 +105,8 @@ _.assign(comp, {
             _.merge(doc, {antrian: array.length+1})
           ]}
         )),
-        doc.no_antrian && db.queue.toArray(arr => withThis(
-          arr.find(i => i.no_antrian === doc.no_antrian),
+        doc.queue_num && db.queue.toArray(arr => withThis(
+          arr.find(i => i.queue_num === doc.queue_num),
           obj => updateBoth('queue', obj._id, _.merge(obj, {done: true}))
         )),
         state.route = 'onePatient',

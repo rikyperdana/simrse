@@ -102,7 +102,7 @@ _.assign(comp, {
                   })
                 ),
                 i.radio.diagnosa && // kalau sudah ada diagnosa baru cetak
-                  makePdf.radio(i.pasien.identitas, _.merge(i.radio, doc)),
+                  makePdf.radio(i.pasien.identity, _.merge(i.radio, doc)),
                 _.assign(state, {modalRadiologi: null, radiologyList: null}),
                 m.redraw()
               ]
@@ -114,8 +114,8 @@ _.assign(comp, {
               _.get(i, 'rawat.tanggal'),
               _.get(i, 'observasi.tanggal')
             ]), true),
-            _.get(i, 'pasien.identitas.no_mr'),
-            _.get(i, 'pasien.identitas.nama_lengkap'),
+            _.get(i, 'pasien.identity.mr_num'),
+            _.get(i, 'pasien.identity.nama_lengkap'),
             ors([
               i.inap && 'Rawat Inap',
               _.get(i, 'rawat.klinik') && look('klinik', i.rawat.klinik),
