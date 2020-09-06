@@ -184,7 +184,7 @@ _.assign(comp, {
               )
           ))},
           [
-            i.pasien.identity.mr_num, i.pasien.identity.nama_lengkap,
+            i.pasien.identity.mr_num, i.pasien.identity.full_name,
             day(i.rawat.tanggal, true), look('cara_bayar', i.rawat.cara_bayar),
             ors([
               i.rawat.klinik && look('klinik', i.rawat.klinik),

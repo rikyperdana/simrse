@@ -3,12 +3,12 @@
 var selects = name => _.reduce(
   {
     alias: ['mr.', 'mrs.', 'ms.', 'child', 'baby'],
-    kelamin: ['male', 'female'],
-    agama: ['islam', 'chatolic', 'protestant', 'budha', 'hindu', 'konghuchu'],
-    nikah: ['married', 'single', 'widow'],
-    pendidikan: ['primary_school', 'junior_high_school', 'high_school', 'diploma', 'bachelor', 'postgraduate', 'doctorate', 'no school'],
-    darah: ['a', 'b', 'ab', 'o'],
-    pekerjaan: ['government_official', 'private', 'enterpreneur', 'army', 'police', 'retiree', 'others'],
+    gender: ['male', 'female'],
+    religion: ['islam', 'chatolic', 'protestant', 'budha', 'hindu', 'konghuchu'],
+    marital: ['married', 'single', 'widow'],
+    education: ['primary_school', 'junior_high_school', 'high_school', 'diploma', 'bachelor', 'postgraduate', 'doctorate', 'no school'],
+    blood: ['a', 'b', 'ab', 'o'],
+    occupation: ['government_official', 'private', 'enterpreneur', 'army', 'police', 'retiree', 'others'],
     cara_bayar: ['self_pay', 'insurance'],
     // kodepoli:     ['int',            'ana',  'obg',   'bed',   'gig'], // referensi INACBGs
     klinik:       ['internal_disease', 'pediatrician', 'obgyn', 'surgery', 'dentist', 'general'],

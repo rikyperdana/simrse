@@ -12,21 +12,21 @@ _.assign(comp, {
       m('h3', 'Patient Medical Record'),
       m('.box', m('table.table.is-striped', _.chunk([
         ['MR Num.', id.mr_num],
-        ['Full Name', id.nama_lengkap],
-        ['Date of Birth', day(id.tanggal_lahir)],
-        ['Place of Birth', id.tempat_lahir],
-        ['Gender', look('kelamin', id.kelamin)],
-        ['Religion', look('agama', id.agama)],
-        ['Marital Status', look('nikah', id.nikah)],
-        ['Last Education', look('pendidikan', id.pendidikan)],
-        ['Bloody Type', look('darah', id.darah)],
-        ['Current Occupation', look('pekerjaan', id.pekerjaan)],
-        ['Home Address', id.tempat_tinggal],
-        ['Age', moment().diff(id.tanggal_lahir, 'years')+' tahun'],
+        ['Full Name', id.full_name],
+        ['Date of Birth', day(id.date_of_birth)],
+        ['Place of Birth', id.place_of_birth],
+        ['Gender', look('gender', id.gender)],
+        ['Religion', look('religion', id.religion)],
+        ['Marital Status', look('marital', id.marital)],
+        ['Last Education', look('education', id.education)],
+        ['Bloody Type', look('blood', id.blood)],
+        ['Current Occupation', look('occupation', id.occupation)],
+        ['Home Address', id.home_address],
+        ['Age', moment().diff(id.date_of_birth, 'years')+' tahun'],
         ['Father Name', id.keluarga.ayah],
         ['Mother Name', id.keluarga.ibu],
         ['Spouse Name', id.keluarga.pasangan],
-        ['Phone Num.', id.kontak]
+        ['Phone Num.', id.contact_num]
       ], 4).map(i => m('tr', i.map(j =>
         [m('th', j[0]), m('td', j[1])]
       ))))),

@@ -34,7 +34,7 @@ _.assign(comp, {
             m.redraw()
           ]},
           m('td', i.identity.mr_num),
-          m('td', i.identity.nama_lengkap),
+          m('td', i.identity.full_name),
           m('td', day(_.get(_.last(i.emergency), 'tanggal'), true))
         ))
       )

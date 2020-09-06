@@ -36,7 +36,7 @@ _.assign(comp, {
         (state.codifications || [])
         .sort((a, b) => a.rawat.tanggal - b.rawat.tanggal)
         .map(({pasien, rawat}) => m('tr',
-          m('td', pasien.identity.nama_lengkap),
+          m('td', pasien.identity.full_name),
           m('td', day(rawat.tanggal)),
           m('td', ors([
             rawat.klinik && look('klinik', rawat.klinik),

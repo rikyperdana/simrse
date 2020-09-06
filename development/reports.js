@@ -38,7 +38,7 @@ var reports = {
             .map(i => [
               day(i.rawat.tanggal || i.rawat.tanggal_masuk),
               String(i.pasien.identity.mr_num),
-              i.pasien.identity.nama_lengkap,
+              i.pasien.identity.full_name,
               ors([ // pilihan layanan
                 i.rawat.klinik && look('klinik', i.rawat.klinik),
                 i.rawat.bed && 'Rawat Inap', 'IGD'
@@ -122,7 +122,7 @@ var reports = {
             rawat.soapDokter.obat.map(i => i.harga && [
               day(rawat.tanggal),
               pasien.identity.mr_num,
-              pasien.identity.nama_lengkap,
+              pasien.identity.full_name,
               ors([
                 rawat.klinik && look('klinik', rawat.klinik),
                 rawat.idinap && 'Rawat Inap',
@@ -160,7 +160,7 @@ var reports = {
               ]) && [
                 day(rawat.tanggal),
                 pasien.identity.mr_num.toString(),
-                pasien.identity.nama_lengkap,
+                pasien.identity.full_name,
                 lookUser(_.get(rawat, 'soapPerawat.perawat')),
                 lookUser(_.get(rawat, 'soapDokter.dokter'))
               ]
@@ -193,7 +193,7 @@ var reports = {
               ]) && [
                 day(rawat.tanggal_masuk),
                 pasien.identity.mr_num.toString(),
-                pasien.identity.nama_lengkap,
+                pasien.identity.full_name,
                 rawat.observasi.map(i =>
                   lookUser(i.perawat)
                 ).join(', '),
@@ -233,7 +233,7 @@ var reports = {
             day(rawat.tanggal),
             look('klinik', rawat.klinik),
             pasien.identity.mr_num.toString(),
-            pasien.identity.nama_lengkap,
+            pasien.identity.full_name,
             lookUser(_.get(rawat, 'soapPerawat.perawat')),
             lookUser(_.get(rawat, 'soapDokter.dokter'))
           ])

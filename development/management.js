@@ -105,21 +105,21 @@ _.assign(comp, {
                   _.merge(i, {_id: randomId(), updated: _.now()})
                 )
               ),
-              result.data[0].nama_lengkap && updater(
+              result.data[0].full_name && updater(
                 'patients', result.data.map(i => _.merge(
                   {updated: _.now(), _id: randomId()},
                   {identity: _.merge(
                     {
                       keluarga: {ayah: i.ayah || '', ibu: i.ibu || '', pasangan: i.pasangan || ''},
-                      kontak: i.kontak || '', nama_lengkap: _.startCase(i.nama_lengkap),
+                      contact_num: i.contact_num || '', full_name: _.startCase(i.full_name),
                       tanggal_input: i.tanggal_input ? +moment(i.tanggal_input) : '',
-                      tanggal_lahir: i.tanggal_lahir ? +moment(i.tanggal_lahir) : '',
-                      tempat_lahir: i.tempat_lahir || '', tempat_tinggal: i.tempat_tinggal || '',
+                      date_of_birth: i.date_of_birth ? +moment(i.date_of_birth) : '',
+                      place_of_birth: i.place_of_birth || '', home_address: i.home_address || '',
                       bayar_kartu: true
                     },
                     _.fromPairs(
-                      ['agama', 'alias', 'darah', 'kelamin', 'ktp',
-                       'nikah', 'mr_num', 'pekerjaan', 'pendidikan']
+                      ['religion', 'alias', 'blood', 'gender', 'civ_id',
+                       'marital', 'mr_num', 'occupation', 'education']
                       .map(j => +i[j] ? [j, +i[j]] : ['', ''])
                     )
                   )}

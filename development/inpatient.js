@@ -68,7 +68,7 @@ _.assign(comp, {
         ]},
         tds([
           i.pasien.identity.mr_num,
-          i.pasien.identity.nama_lengkap,
+          i.pasien.identity.full_name,
           day(i.inap.tanggal, true),
           _.get(i.inap, 'klinik') ? 'Outpatient' : 'Emergency',
           lookUser(_.get(i.inap, 'soapDokter.dokter'))
@@ -109,7 +109,7 @@ _.assign(comp, {
             })},
             tds([
               i.identity.mr_num,
-              i.identity.nama_lengkap,
+              i.identity.full_name,
               [
                 _.upperCase(bed.kelas),
                 _.startCase(bed.kamar),
@@ -238,7 +238,7 @@ _.assign(comp, {
                   o.bed.nomor === m+1
                 ])
               )
-            ), 'identity.nama_lengkap')
+            ), 'identity.full_name')
           ])
         )), 2
       ).map(p => m('tr', p.map(

@@ -5,7 +5,7 @@ makePdf = {
   card: identity =>
     pdfMake.createPdf(defaultStyle({
       content: [
-        'Nama: '+identity.nama_lengkap,
+        'Nama: '+identity.full_name,
         'No. MR: '+identity.mr_num
       ],
       pageSize: 'B8',
@@ -18,14 +18,14 @@ makePdf = {
       kop,
       {text: 'Data Umum Pasien\n', alignment: 'center'},
       {columns: [
-        ['No. MR', 'Nama Lengkap', 'Tempat & Tanggal Lahir', 'Nama Ibu', 'Alamat', 'Kontak'],
+        ['No. MR', 'Nama Lengkap', 'Tempat & Tanggal Lahir', 'Nama Ibu', 'Alamat', 'contact_num'],
         [
           identity.mr_num,
-          identity.nama_lengkap,
-          (identity.tempat_lahir || '')+', '+day(identity.tanggal_lahir),
+          identity.full_name,
+          (identity.place_of_birth || '')+', '+day(identity.date_of_birth),
           _.get(identity.keluarga, 'ibu') || '',
-          identity.tempat_tinggal || '',
-          identity.kontak || ''
+          identity.home_address || '',
+          identity.contact_num || ''
         ].map(i => ': '+i)
       ]},
       {text: '\nPersetujuan Umum General Consent\n', alignment: 'center'},
@@ -35,7 +35,7 @@ makePdf = {
         ['', '', 'Saya memberi kuasa kepada dokter dan semua tenaga kesehatan untuk melakukan pemeriksaan / pengobatan / tindakan yang diperlukan dalam upaya kesembuhan saya / pasien tersebut diatas.'],
         ['', '', 'Saya memberi kuasa kepada dokter dan semua tenaga kesehatan yang ikut merawat saya untuk memberikan keterangan medis saya kepada yang bertanggungjawab atas biaya perawatan saya.'],
         ['', '', 'Saya memberi kuasa kepada RS Medicare untuk menginformasikan identity sosial saya kepada keluarga / rekan / masyarakat.'],
-        ['', '', 'Saya mengatakan bahwa informasi hasil pemeriksaan / rekam medis saya dapat digunakan untuk pendidikan / penelitian demi kemajuan ilmu kesehatan.']
+        ['', '', 'Saya mengatakan bahwa informasi hasil pemeriksaan / rekam medis saya dapat digunakan untuk education / penelitian demi kemajuan ilmu kesehatan.']
       ]}},
       '\nPetunjuk :\nS: Setuju\nTS: Tidak Setuju',
       {alignment: 'justify', columns: [
@@ -50,7 +50,7 @@ makePdf = {
       [
         day(_.now()),
         pasien.identity.mr_num,
-        pasien.identity.nama_lengkap,
+        pasien.identity.full_name,
         'Total: '+currency(_.sum([
           rawatLength > 1 ? 0 : tarifKartu,
           1000 * +look('tarif_klinik', rawat.klinik)
@@ -63,13 +63,13 @@ makePdf = {
     pdfMake.createPdf(defaultStyle({content: [
       kop,
       {columns: [
-        ['No. MR', 'Nama Pasien', 'Jenis Kelamin', 'Tanggal Lahir', 'Umur', 'Layanan'],
+        ['No. MR', 'Nama Pasien', 'Jenis gender', 'Tanggal Lahir', 'Umur', 'Layanan'],
         [
           pasien.identity.mr_num,
-          _.startCase(pasien.identity.nama_lengkap),
-          look('kelamin', pasien.identity.kelamin) || '-',
-          day(pasien.identity.tanggal_lahir),
-          moment().diff(pasien.identity.tanggal_lahir, 'years')+' tahun',
+          _.startCase(pasien.identity.full_name),
+          look('gender', pasien.identity.gender) || '-',
+          day(pasien.identity.date_of_birth),
+          moment().diff(pasien.identity.date_of_birth, 'years')+' tahun',
           ors([
             rawat.observasi && 'Rawat Inap',
             rawat.klinik && look('klinik', rawat.klinik).label,
@@ -91,17 +91,17 @@ makePdf = {
       kop,
       {table: {widths: ['auto', '*', 'auto'], body: [
         [
-          'Nama: '+identity.nama_lengkap,
-          'Tanggal lahir: '+day(identity.tanggal_lahir),
+          'Nama: '+identity.full_name,
+          'Tanggal lahir: '+day(identity.date_of_birth),
           'No. MR: '+identity.mr_num
         ],
         [
-          'Kelamin: '+look('kelamin', identity.kelamin),
+          'gender: '+look('gender', identity.gender),
           'Tanggal kunjungan: '+day(ors([
             rawat.tanggal, rawat.tanggal_masuk,
             _.get(rawat, 'soapDokter.tanggal')
           ])),
-          'Gol. Darah: '+look('darah', identity.darah)],
+          'Gol. blood: '+look('blood', identity.blood)],
         [
           'Klinik: '+look('klinik', rawat.klinik),
           'Tanggal cetak: '+day(_.now()),
@@ -123,7 +123,7 @@ makePdf = {
           ], [
             'Pernapasan: '+(_.get(rawat, 'soapPerawat.fisik.pernapasan') || '-'),
             'Nadi: '+(_.get(rawat, 'soapPerawat.fisik.nadi') || '-'),
-            'Tekanan darah: '+_.join(_.values(_.get(rawat, 'soapPerawat.fisik.tekanan_darah') || '-'), '/')
+            'Tekanan blood: '+_.join(_.values(_.get(rawat, 'soapPerawat.fisik.tekanan_blood') || '-'), '/')
           ]
         ]}}, '\n',
         {table: {widths: ['auto', '*'], body: [
@@ -247,7 +247,7 @@ makePdf = {
         fontSize: 15, bold: true, alignment: 'center'
       }, '\n\n',
       {table: {widths: ['auto', '*'], body: [
-        ['Nama Pasien', ': '+identity.nama_lengkap],
+        ['Nama Pasien', ': '+identity.full_name],
         ['No. MR', ': '+identity.mr_num],
         ['Petugas', ': '+lookUser(radiologi.petugas)],
         ['Kode berkas', ': '+radiologi.kode_berkas]

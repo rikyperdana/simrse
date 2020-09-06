@@ -13,7 +13,7 @@ _.assign(comp, {
         ]) && [
           state.loading = true, m.redraw(),
           db.patients.filter(i => _.includes(
-            _.lowerCase(i.identity.nama_lengkap)+i.identity.mr_num,
+            _.lowerCase(i.identity.full_name)+i.identity.mr_num,
             e.target.value
           )).toArray(array => [
             _.assign(state, {
@@ -33,15 +33,15 @@ _.assign(comp, {
       )),
       m('tbody',
         (state.searchPatients || [])
-        .sort((a, b) => a.identity.tanggal_lahir - b.identity.tanggal_lahir)
+        .sort((a, b) => a.identity.date_of_birth - b.identity.date_of_birth)
         .map(i => m('tr',
           {ondblclick: () => _.assign(state, {
             route: 'onePatient', onePatient: i
           })},
           tds([
             day(_.get(_.last([...(i.rawatJalan || []), ...(i.emergency || [])]), 'tanggal')),
-            i.identity.mr_num, i.identity.nama_lengkap,
-            day(i.identity.tanggal_lahir), i.identity.tempat_lahir
+            i.identity.mr_num, i.identity.full_name,
+            day(i.identity.date_of_birth), i.identity.place_of_birth
           ])
         ))
       )

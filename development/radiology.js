@@ -115,7 +115,7 @@ _.assign(comp, {
               _.get(i, 'observasi.tanggal')
             ]), true),
             _.get(i, 'pasien.identity.mr_num'),
-            _.get(i, 'pasien.identity.nama_lengkap'),
+            _.get(i, 'pasien.identity.full_name'),
             ors([
               i.inap && 'Rawat Inap',
               _.get(i, 'rawat.klinik') && look('klinik', i.rawat.klinik),

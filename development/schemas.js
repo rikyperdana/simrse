@@ -17,37 +17,37 @@ var schemas = {
       type: Number, optional: true,
       autoform: {type: 'select', options: selects('alias')}
     },
-    nama_lengkap: {type: String, autoform: {placeholder: '4 letters minimum'}},
-    ktp: {type: Number, label: 'Citizen ID', optional: true},
-    bpjs: {type: Number, label: 'Insurance Num.', optional: true},
-    tanggal_lahir: {type: Date},
-    tempat_lahir: {type: String},
-    kelamin: {
+    full_name: {type: String, autoform: {placeholder: '4 letters minimum'}},
+    civ_id: {type: Number, label: 'Citizen ID', optional: true},
+    insurance: {type: Number, label: 'Insurance Num.', optional: true},
+    date_of_birth: {type: Date},
+    place_of_birth: {type: String},
+    gender: {
       type: Number, label: 'Gender',
-      autoform: {type: 'select', options: selects('kelamin')}
+      autoform: {type: 'select', options: selects('gender')}
     },
-    agama: {
+    religion: {
       type: Number, optional: true, label: 'Religion',
-      autoform: {type: 'select', options: selects('agama')}
+      autoform: {type: 'select', options: selects('religion')}
     },
-    nikah: {
+    marital: {
       type: Number, label: 'Marital Status', optional: true,
-      autoform: {type: 'select', options: selects('nikah')}
+      autoform: {type: 'select', options: selects('marital')}
     },
-    pendidikan: {
+    education: {
       type: Number, label: 'Last Education', optional: true,
-      autoform: {type: 'select', options: selects('pendidikan')}
+      autoform: {type: 'select', options: selects('education')}
     },
-    darah: {
-      type: Number, label: 'Blood Type', optional: true,
-      autoform: {type: 'select', options: selects('darah')}
+    blood: {
+      type: Number, optional: true,
+      autoform: {type: 'select', options: selects('blood')}
     },
-    pekerjaan: {
+    occupation: {
       type: Number, label: 'Current Occupation', optional: true,
-      autoform: {type: 'select', options: selects('pekerjaan')}
+      autoform: {type: 'select', options: selects('occupation')}
     },
-    tempat_tinggal: {type: String, optional: true, label: 'Home Address'},
-    kontak: {type: Number, optional: true, label: 'Phone Number'},
+    home_address: {type: String, optional: true},
+    contact_num: {type: Number, optional: true, label: 'Phone Number'},
     keluarga: {type: Object},
     'keluarga.ayah': {type: String, optional: true, label: 'Father Name'},
     'keluarga.ibu': {type: String, optional: true, label: 'Mother Name'},

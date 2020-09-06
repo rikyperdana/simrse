@@ -34,9 +34,9 @@ _.assign(comp, {
           })},
           tds([
             day(_.get(_.last(i.rawatJalan), 'tanggal'), true),
-            i.identity.mr_num, i.identity.nama_lengkap,
-            day(i.identity.tanggal_lahir),
-            i.identity.tempat_lahir
+            i.identity.mr_num, i.identity.full_name,
+            day(i.identity.date_of_birth),
+            i.identity.place_of_birth
           ])
         ))
       )
